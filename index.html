@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ChatVerse</title>
+  <title>ChatVerse Live</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -21,9 +19,7 @@
       padding: 30px;
     }
 
-    .active {
-      display: block;
-    }
+    .active { display: block; }
 
     .lobby-container {
       max-width: 900px;
@@ -45,10 +41,6 @@
       font-size: 18px;
     }
 
-    .name-box {
-      margin-bottom: 30px;
-    }
-
     .name-box input {
       padding: 14px;
       width: 280px;
@@ -57,6 +49,7 @@
       font-size: 16px;
       outline: none;
       text-align: center;
+      margin-bottom: 30px;
     }
 
     .room-grid {
@@ -72,7 +65,6 @@
       padding: 25px;
       cursor: pointer;
       transition: 0.3s;
-      backdrop-filter: blur(10px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
 
@@ -84,10 +76,6 @@
     .room-emoji {
       font-size: 45px;
       margin-bottom: 10px;
-    }
-
-    .room-card h2 {
-      margin: 10px 0;
     }
 
     .room-card p {
@@ -111,6 +99,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
     }
 
     .chat-header h1 {
@@ -139,7 +128,7 @@
       margin: 12px 0;
       padding: 12px 16px;
       border-radius: 18px;
-      max-width: 70%;
+      max-width: 75%;
       line-height: 1.4;
       clear: both;
       animation: pop 0.2s ease-in-out;
@@ -158,7 +147,7 @@
       font-weight: bold;
     }
 
-    .bot {
+    .other {
       float: left;
       background: rgba(255, 255, 255, 0.22);
       color: white;
@@ -197,68 +186,63 @@
       font-size: 16px;
     }
 
-    .send-button:hover,
-    .back-button:hover {
-      opacity: 0.85;
-    }
-
-    .public-note {
-      margin-top: 25px;
-      color: #cccccc;
+    .warning {
+      max-width: 650px;
+      margin: 25px auto 0;
+      color: #ddd;
       font-size: 14px;
+      line-height: 1.5;
     }
   </style>
 </head>
 <body>
 
-  <!-- LOBBY SCREEN -->
   <div id="lobbyScreen" class="screen active">
     <div class="lobby-container">
-      <h1 class="title">ChatVerse</h1>
-      <p class="subtitle">Choose a lobby and start chatting</p>
+      <h1 class="title">ChatVerse Live</h1>
+      <p class="subtitle">Choose a room and chat live with other people</p>
 
       <div class="name-box">
         <input type="text" id="username" placeholder="Enter your username">
       </div>
 
       <div class="room-grid">
-        <div class="room-card" onclick="enterRoom('Gaming Lobby', '🎮')">
+        <div class="room-card" onclick="enterRoom('gaming', 'Gaming Lobby', '🎮')">
           <div class="room-emoji">🎮</div>
           <h2>Gaming Lobby</h2>
           <p>Talk about games, wins, and funny moments.</p>
         </div>
 
-        <div class="room-card" onclick="enterRoom('School Lobby', '📚')">
+        <div class="room-card" onclick="enterRoom('school', 'School Lobby', '📚')">
           <div class="room-emoji">📚</div>
           <h2>School Lobby</h2>
           <p>Homework help, study chat, and class talk.</p>
         </div>
 
-        <div class="room-card" onclick="enterRoom('Sports Lobby', '⚾')">
+        <div class="room-card" onclick="enterRoom('sports', 'Sports Lobby', '⚾')">
           <div class="room-emoji">⚾</div>
           <h2>Sports Lobby</h2>
           <p>Baseball, basketball, soccer, and more.</p>
         </div>
 
-        <div class="room-card" onclick="enterRoom('Random Lobby', '💬')">
+        <div class="room-card" onclick="enterRoom('random', 'Random Lobby', '💬')">
           <div class="room-emoji">💬</div>
           <h2>Random Lobby</h2>
           <p>Just chill and talk about anything.</p>
         </div>
       </div>
 
-      <p class="public-note">
-        Prototype version: this looks like a public chat site, but real public chat needs hosting and a server.
+      <p class="warning">
+        Safety note: This beginner version does not have login, moderation, or message filtering yet. Only share it with people you trust.
       </p>
     </div>
   </div>
 
-  <!-- CHAT SCREEN -->
   <div id="chatScreen" class="screen">
     <div class="chat-page">
       <div class="chat-header">
         <h1 id="roomTitle">Chat Room</h1>
-        <button class="back-button" onclick="goBackToLobby()">Back to Lobby</button>
+        <button class="back-button" onclick="goBackToLobby()">Back</button>
       </div>
 
       <div class="chat-box" id="chatBox"></div>
@@ -270,76 +254,11 @@
     </div>
   </div>
 
-  <script>
-    var currentRoom = "";
-    var currentEmoji = "";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    function enterRoom(roomName, emoji) {
-      var username = document.getElementById("username").value.trim();
-
-      if (username === "") {
-        alert("Please enter a username first!");
-        return;
-      }
-
-      currentRoom = roomName;
-      currentEmoji = emoji;
-
-      document.getElementById("lobbyScreen").classList.remove("active");
-      document.getElementById("chatScreen").classList.add("active");
-      document.getElementById("roomTitle").textContent = emoji + " " + roomName;
-
-      var chatBox = document.getElementById("chatBox");
-      chatBox.innerHTML = "";
-
-      addBotMessage("Welcome to " + roomName + ", " + username + "!");
-      addBotMessage("This is a practice chat room. Your messages will appear here.");
-    }
-
-    function goBackToLobby() {
-      document.getElementById("chatScreen").classList.remove("active");
-      document.getElementById("lobbyScreen").classList.add("active");
-      document.getElementById("messageInput").value = "";
-    }
-
-    function sendMessage() {
-      var input = document.getElementById("messageInput");
-      var chatBox = document.getElementById("chatBox");
-      var username = document.getElementById("username").value.trim();
-      var messageText = input.value.trim();
-
-      if (messageText === "") {
-        return;
-      }
-
-      var newMessage = document.createElement("div");
-      newMessage.className = "message me";
-      newMessage.innerHTML = "<div class='sender'>" + username + "</div>" + messageText;
-
-      chatBox.appendChild(newMessage);
-      input.value = "";
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-      setTimeout(function() {
-        addBotMessage("Nice message! Real public replies need a server/database.");
-      }, 700);
-    }
-
-    function addBotMessage(text) {
-      var chatBox = document.getElementById("chatBox");
-      var botMessage = document.createElement("div");
-      botMessage.className = "message bot";
-      botMessage.innerHTML = "<div class='sender'>ChatVerse Bot</div>" + text;
-      chatBox.appendChild(botMessage);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    document.getElementById("messageInput").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        sendMessage();
-      }
-    });
-  </script>
-
-</body>
-</html>
+    // STEP 1: Replace this with YOUR Firebase config.
+    const firebaseConfig = {
+      apiKey: "PASTE_YOUR_API_KEY_HERE",
+      authDomain: "PASTE_YOUR_AUTH_DOMAI
