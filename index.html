@@ -356,7 +356,54 @@ body::after {
 </head>
 
 <body>
+<div id="loadingScreen" class="screen active">
 
+  <div class="lobby-container">
+
+    <h1 class="title">ChatVerse Live</h1>
+
+    <p id="loadingText" class="subtitle">
+      Loading Room...
+    </p>
+
+    <div class="loaderRing"></div>
+
+    <div class="loadingSteps">
+
+      <div class="loadingStep">
+        <span>Connecting to servers...</span>
+        <div class="loadingDot active"></div>
+      </div>
+
+      <div class="loadingStep">
+        <span>Waiting for servers...</span>
+        <div class="loadingDot active"></div>
+      </div>
+
+      <div class="loadingStep">
+        <span>Loading HTML...</span>
+        <div class="loadingDot active"></div>
+      </div>
+
+      <div class="loadingStep">
+        <span>Loading resources...</span>
+        <div class="loadingDot"></div>
+      </div>
+
+      <div class="loadingStep">
+        <span>Almost ready...</span>
+        <div class="loadingDot"></div>
+      </div>
+
+    </div>
+
+    <div class="loadingBarContainer">
+      <div class="loadingBar"></div>
+    </div>
+
+  </div>
+
+</div>
   <!-- LOBBY -->
   <div id="lobbyScreen" class="screen active">
 
