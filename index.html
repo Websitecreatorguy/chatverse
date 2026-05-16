@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ChatVerse Live</title>
+  <title>ChatVerse Arcade</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #000000;
+      background: #000;
       color: white;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     body::before {
@@ -21,10 +21,10 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(circle at 20% 20%, rgba(0,140,255,0.18), transparent 25%),
-        radial-gradient(circle at 80% 30%, rgba(180,0,255,0.18), transparent 25%),
-        radial-gradient(circle at 50% 80%, rgba(255,0,120,0.12), transparent 25%);
-      animation: pulseBackground 8s infinite alternate;
+        radial-gradient(circle at 20% 20%, rgba(0,170,255,0.18), transparent 25%),
+        radial-gradient(circle at 80% 25%, rgba(170,0,255,0.20), transparent 25%),
+        radial-gradient(circle at 50% 85%, rgba(255,0,130,0.14), transparent 30%);
+      animation: pulseBackground 7s infinite alternate;
       z-index: -2;
     }
 
@@ -35,24 +35,17 @@
       background-image:
         linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-      background-size: 40px 40px;
+      background-size: 42px 42px;
       z-index: -1;
     }
 
     @keyframes pulseBackground {
-      from { transform: scale(1); opacity: 0.7; }
+      from { transform: scale(1); opacity: 0.75; }
       to { transform: scale(1.1); opacity: 1; }
     }
 
-    .screen {
-      display: none;
-      min-height: 100vh;
-      padding: 30px;
-    }
-
-    .screen.active {
-      display: block;
-    }
+    .screen { display: none; min-height: 100vh; padding: 24px; }
+    .screen.active { display: block; }
 
     #loadingScreen.active {
       display: flex;
@@ -61,339 +54,390 @@
       text-align: center;
     }
 
-    .loading-card {
-      width: 100%;
-      max-width: 520px;
-      padding: 30px;
-    }
-
     .title {
-      font-size: 52px;
-      margin-bottom: 10px;
-      background: linear-gradient(90deg, #8a2eff, #00aaff, #ff65a3);
+      font-size: clamp(42px, 8vw, 78px);
+      margin: 0 0 10px;
+      background: linear-gradient(90deg, #8a2eff, #00aaff, #ff65a3, #feff9c);
       -webkit-background-clip: text;
       color: transparent;
-      text-shadow: 0 0 35px rgba(138,46,255,0.35);
     }
 
-    .subtitle {
-      color: #d5d5d5;
-      margin-bottom: 28px;
-      font-size: 18px;
-    }
+    .subtitle { color: #d8d8d8; font-size: 18px; }
 
     .loaderRing {
-      width: 120px;
-      height: 120px;
+      width: 125px;
+      height: 125px;
       border-radius: 50%;
       border: 7px solid rgba(255,255,255,0.08);
       border-top: 7px solid #8a2eff;
       border-right: 7px solid #00aaff;
       animation: spin 1.1s linear infinite;
-      margin: 25px auto;
-      box-shadow:
-        0 0 20px rgba(138,46,255,0.6),
-        0 0 40px rgba(0,170,255,0.4);
+      margin: 28px auto;
+      box-shadow: 0 0 25px rgba(138,46,255,0.7), 0 0 45px rgba(0,170,255,0.45);
     }
 
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .loadingSteps {
-      margin: 22px auto;
-      width: 340px;
-      max-width: 100%;
-      text-align: left;
-    }
-
-    .loadingStep {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 14px 0;
-      color: rgba(255,255,255,0.85);
-      font-size: 15px;
-      letter-spacing: 0.4px;
-    }
-
-    .loadingDot {
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: #333;
-      border: 1px solid #555;
-    }
-
-    .loadingDot.active {
-      background: #8a2eff;
-      box-shadow: 0 0 12px #8a2eff, 0 0 22px #00aaff;
-      animation: blink 1.2s infinite;
-    }
-
-    @keyframes blink {
-      0% { opacity: 0.45; }
-      50% { opacity: 1; }
-      100% { opacity: 0.45; }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .loadingBarContainer {
-      width: 360px;
+      width: 340px;
       max-width: 100%;
       height: 12px;
       background: rgba(255,255,255,0.08);
       border-radius: 30px;
       overflow: hidden;
-      margin: 30px auto 10px;
+      margin: 25px auto;
     }
 
     .loadingBar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #8a2eff, #00aaff);
+      background: linear-gradient(90deg, #8a2eff, #00aaff, #ff65a3);
       border-radius: 30px;
-      animation: loadBar 4s forwards;
-      box-shadow: 0 0 18px #8a2eff, 0 0 28px #00aaff;
+      animation: loadBar 3.8s forwards;
     }
 
-    @keyframes loadBar {
-      from { width: 0%; }
-      to { width: 100%; }
+    @keyframes loadBar { to { width: 100%; } }
+
+    .app-shell {
+      max-width: 1150px;
+      margin: 0 auto;
     }
 
-    .lobby-container {
-      max-width: 950px;
-      margin: 40px auto;
+    .glass {
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 26px;
+      box-shadow: 0 0 45px rgba(0,170,255,0.10);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero {
+      padding: 36px;
       text-align: center;
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 22px;
-      padding: 35px;
-      background: rgba(255,255,255,0.035);
-      box-shadow: 0 0 40px rgba(0,170,255,0.08);
+      margin-top: 25px;
     }
 
-    .name-box input {
-      padding: 15px 20px;
-      width: 320px;
-      max-width: 100%;
+    .name-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 28px 0;
+    }
+
+    input, select {
+      padding: 14px 18px;
       border-radius: 30px;
-      border: 1px solid rgba(138,46,255,0.8);
+      border: 1px solid rgba(0,170,255,0.55);
+      background: rgba(0,0,0,0.65);
+      color: white;
       font-size: 16px;
       outline: none;
-      text-align: center;
-      margin-bottom: 35px;
-      background: rgba(0,0,0,0.7);
-      color: white;
-      box-shadow: 0 0 18px rgba(138,46,255,0.25);
     }
 
-    .room-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 22px;
-    }
-
-    .room-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 22px;
-      padding: 26px;
+    button {
+      border: none;
+      border-radius: 30px;
+      padding: 12px 18px;
+      font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
-      min-height: 170px;
+      color: white;
+      background: linear-gradient(135deg, #8a2eff, #00aaff);
+      transition: 0.2s;
     }
 
-    .room-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      background: rgba(255,255,255,0.11);
-      box-shadow: 0 0 30px rgba(0,170,255,0.25);
+    button:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 18px 0 0;
     }
 
-    .room-emoji {
-      font-size: 46px;
-      margin-bottom: 10px;
+    .pill {
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.13);
     }
 
-    .chat-page {
-      max-width: 850px;
-      margin: 25px auto;
-      background: rgba(255,255,255,0.06);
-      border-radius: 25px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.18);
-      box-shadow: 0 0 40px rgba(0,170,255,0.12);
+    .section-title {
+      font-size: 28px;
+      margin: 32px 0 16px;
     }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 22px;
+      min-height: 165px;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .card:hover {
+      transform: translateY(-7px) scale(1.015);
+      box-shadow: 0 0 35px rgba(0,170,255,0.22);
+    }
+
+    .emoji { font-size: 46px; margin-bottom: 8px; }
+    .muted { color: #cfcfcf; font-size: 14px; line-height: 1.5; }
+
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 0.9fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    @media (max-width: 850px) {
+      .chat-layout { grid-template-columns: 1fr; }
+    }
+
+    .chat-page { overflow: hidden; }
 
     .chat-header {
-      padding: 18px 20px;
+      padding: 17px 18px;
       background: rgba(0,0,0,0.55);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
 
     .chat-box {
       height: 470px;
-      padding: 20px;
+      padding: 18px;
       overflow-y: auto;
     }
 
     .message {
       margin: 12px 0;
-      padding: 12px 16px;
+      padding: 12px 15px;
       border-radius: 18px;
-      max-width: 75%;
+      max-width: 78%;
       clear: both;
       word-wrap: break-word;
+      animation: pop 0.18s ease-out;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     .me {
       float: right;
+      color: #050505;
       background: linear-gradient(135deg, #4facfe, #00f2fe);
-      color: black;
       font-weight: bold;
     }
 
     .other {
       float: left;
-      background: rgba(255,255,255,0.16);
-      color: white;
+      background: rgba(255,255,255,0.15);
     }
 
-    .sender {
-      font-size: 12px;
-      opacity: 0.8;
-      margin-bottom: 4px;
-    }
+    .sender { font-size: 12px; opacity: 0.78; margin-bottom: 4px; }
 
     .input-area {
       display: flex;
-      padding: 15px;
-      background: rgba(0,0,0,0.55);
       gap: 10px;
-    }
-
-    .input-area input {
-      flex: 1;
       padding: 14px;
-      border-radius: 25px;
-      border: none;
-      font-size: 16px;
-      outline: none;
+      background: rgba(0,0,0,0.55);
     }
 
-    .send-button,
-    .back-button {
-      border: none;
-      border-radius: 25px;
-      padding: 10px 20px;
+    .input-area input { flex: 1; }
+
+    .side-panel { padding: 18px; }
+
+    .mini-box {
+      padding: 16px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.11);
+    }
+
+    .game-area {
+      min-height: 180px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.06);
+      margin: 12px 0;
+      padding: 16px;
+    }
+
+    .tap-target {
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff65a3, #feff9c);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: bold;
+      font-size: 20px;
+      user-select: none;
       cursor: pointer;
+      box-shadow: 0 0 25px rgba(255,101,163,0.55);
     }
 
-    .send-button {
-      background: #00aaff;
-      color: white;
+    .choice-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    .back-button {
-      background: #ff65a3;
-      color: white;
+    .small-btn {
+      padding: 9px 12px;
+      font-size: 13px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .danger-note {
+      color: #ffd2d2;
+      font-size: 13px;
+      line-height: 1.45;
+      margin-top: 14px;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- LOADING SCREEN -->
   <div id="loadingScreen" class="screen active">
-    <div class="loading-card">
-      <h1 class="title">ChatVerse</h1>
-      <p id="loadingText" class="subtitle">Loading Room...</p>
-
+    <div>
+      <h1 class="title">ChatVerse Arcade</h1>
+      <p id="loadingText" class="subtitle">Loading fun...</p>
       <div class="loaderRing"></div>
-
-      <div class="loadingSteps">
-        <div class="loadingStep">
-          <span>Connecting to servers...</span>
-          <div class="loadingDot active"></div>
-        </div>
-        <div class="loadingStep">
-          <span>Waiting for servers...</span>
-          <div class="loadingDot active"></div>
-        </div>
-        <div class="loadingStep">
-          <span>Loading HTML...</span>
-          <div class="loadingDot active"></div>
-        </div>
-        <div class="loadingStep">
-          <span>Loading resources...</span>
-          <div class="loadingDot active"></div>
-        </div>
-        <div class="loadingStep">
-          <span>Almost ready...</span>
-          <div class="loadingDot active"></div>
-        </div>
-      </div>
-
-      <div class="loadingBarContainer">
-        <div class="loadingBar"></div>
-      </div>
+      <div class="loadingBarContainer"><div class="loadingBar"></div></div>
+      <p class="muted">Connecting chat • Loading games • Building lobbies</p>
     </div>
   </div>
 
-  <!-- LOBBY -->
   <div id="lobbyScreen" class="screen">
-    <div class="lobby-container">
-      <h1 class="title">ChatVerse Live</h1>
-      <p class="subtitle">Choose a room and chat live</p>
+    <div class="app-shell">
+      <div class="hero glass">
+        <h1 class="title">ChatVerse Arcade</h1>
+        <p class="subtitle">Live chat + mini games + XP rooms</p>
 
-      <div class="name-box">
-        <input type="text" id="username" placeholder="Enter username">
+        <div class="name-row">
+          <input id="username" placeholder="Enter username">
+          <select id="avatar">
+            <option>😎</option>
+            <option>🔥</option>
+            <option>⚾</option>
+            <option>🎮</option>
+            <option>👑</option>
+            <option>🧠</option>
+            <option>🚀</option>
+          </select>
+        </div>
+
+        <div class="stats">
+          <div class="pill">⭐ XP: <span id="xpCount">0</span></div>
+          <div class="pill">💬 Messages: <span id="messageCount">0</span></div>
+          <div class="pill">🎯 Daily: Send 5 messages</div>
+        </div>
+
+        <p class="danger-note">Public chat safety: share only with people you trust. Do not post your real full name, address, phone number, school, or passwords.</p>
       </div>
 
-      <div class="room-grid">
-        <div class="room-card" onclick="enterRoom('gaming','🎮 Gaming Lobby')">
-          <div class="room-emoji">🎮</div>
-          <h2>Gaming Lobby</h2>
-          <p>Talk about games</p>
+      <h2 class="section-title">Choose a Chat Room</h2>
+      <div class="grid">
+        <div class="card glass" onclick="enterRoom('gaming','🎮 Gaming Lobby')">
+          <div class="emoji">🎮</div><h2>Gaming Lobby</h2><p class="muted">Talk games, wins, clips, and challenges.</p>
         </div>
-
-        <div class="room-card" onclick="enterRoom('sports','⚾ Sports Lobby')">
-          <div class="room-emoji">⚾</div>
-          <h2>Sports Lobby</h2>
-          <p>Talk about sports</p>
+        <div class="card glass" onclick="enterRoom('sports','⚾ Sports Lobby')">
+          <div class="emoji">⚾</div><h2>Sports Lobby</h2><p class="muted">Baseball, basketball, soccer, and more.</p>
         </div>
-
-        <div class="room-card" onclick="enterRoom('school','📚 School Lobby')">
-          <div class="room-emoji">📚</div>
-          <h2>School Lobby</h2>
-          <p>Study and discuss</p>
+        <div class="card glass" onclick="enterRoom('school','📚 School Lobby')">
+          <div class="emoji">📚</div><h2>School Lobby</h2><p class="muted">Homework help, study chat, and trivia.</p>
         </div>
+        <div class="card glass" onclick="enterRoom('random','💬 Random Lobby')">
+          <div class="emoji">💬</div><h2>Random Lobby</h2><p class="muted">Memes, ideas, polls, and fun talk.</p>
+        </div>
+      </div>
 
-        <div class="room-card" onclick="enterRoom('random','💬 Random Lobby')">
-          <div class="room-emoji">💬</div>
-          <h2>Random Lobby</h2>
-          <p>Chat about anything</p>
+      <h2 class="section-title">Mini Games</h2>
+      <div class="grid">
+        <div class="card glass" onclick="openGame('tap')">
+          <div class="emoji">⚡</div><h2>Speed Tap</h2><p class="muted">Tap fast for 10 seconds and earn XP.</p>
+        </div>
+        <div class="card glass" onclick="openGame('guess')">
+          <div class="emoji">🔢</div><h2>Number Guess</h2><p class="muted">Guess 1–10 and beat the computer.</p>
+        </div>
+        <div class="card glass" onclick="openGame('rps')">
+          <div class="emoji">✊</div><h2>Rock Paper Scissors</h2><p class="muted">Classic quick challenge.</p>
+        </div>
+        <div class="card glass" onclick="openGame('poll')">
+          <div class="emoji">📊</div><h2>Quick Poll</h2><p class="muted">Create fun questions for friends.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- CHAT -->
   <div id="chatScreen" class="screen">
-    <div class="chat-page">
-      <div class="chat-header">
-        <h1 id="roomTitle">Room</h1>
-        <button class="back-button" onclick="goBack()">Back</button>
+    <div class="app-shell">
+      <div class="chat-layout">
+        <div class="chat-page glass">
+          <div class="chat-header">
+            <h2 id="roomTitle">Room</h2>
+            <button onclick="goBack()">Back</button>
+          </div>
+          <div class="chat-box" id="chatBox"></div>
+          <div class="input-area">
+            <input id="messageInput" placeholder="Type message...">
+            <button onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+
+        <div class="side-panel glass">
+          <h2>Arcade Panel</h2>
+          <div class="mini-box">
+            <b>Your Stats</b>
+            <p>⭐ XP: <span id="sideXp">0</span></p>
+            <p>💬 Messages: <span id="sideMessages">0</span></p>
+          </div>
+          <div class="mini-box">
+            <b>Quick Actions</b>
+            <div class="choice-row" style="margin-top:10px;">
+              <button class="small-btn" onclick="sendQuick('🔥')">🔥</button>
+              <button class="small-btn" onclick="sendQuick('LOL 😂')">LOL 😂</button>
+              <button class="small-btn" onclick="sendQuick('W! 🏆')">W 🏆</button>
+              <button class="small-btn" onclick="sendQuick('GG 🎮')">GG 🎮</button>
+            </div>
+          </div>
+          <div class="mini-box">
+            <b>Daily Challenge</b>
+            <p class="muted">Send 5 messages to earn bonus XP.</p>
+            <button onclick="claimDaily()">Claim Daily</button>
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
 
-      <div class="chat-box" id="chatBox"></div>
-
-      <div class="input-area">
-        <input type="text" id="messageInput" placeholder="Type message...">
-        <button class="send-button" onclick="sendMessage()">Send</button>
+  <div id="gameScreen" class="screen">
+    <div class="app-shell">
+      <div class="hero glass">
+        <h1 id="gameTitle">Mini Game</h1>
+        <div id="gameArea" class="game-area"></div>
+        <p id="gameResult" class="subtitle"></p>
+        <button onclick="backToLobby()">Back to Lobby</button>
       </div>
     </div>
   </div>
@@ -414,74 +458,195 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    let currentRoom = "";
+    let unsubscribe = null;
+    let xp = Number(localStorage.getItem("chatverseXP") || 0);
+    let messageCount = Number(localStorage.getItem("chatverseMessages") || 0);
+
+    function updateStats() {
+      document.getElementById("xpCount").textContent = xp;
+      document.getElementById("messageCount").textContent = messageCount;
+      document.getElementById("sideXp").textContent = xp;
+      document.getElementById("sideMessages").textContent = messageCount;
+      localStorage.setItem("chatverseXP", xp);
+      localStorage.setItem("chatverseMessages", messageCount);
+    }
+
     setTimeout(function() {
       document.getElementById("loadingScreen").classList.remove("active");
       document.getElementById("lobbyScreen").classList.add("active");
-    }, 4200);
+      updateStats();
+    }, 3900);
 
-    let currentRoom = "";
-    let unsubscribe = null;
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
 
     window.enterRoom = function(roomId, roomName) {
       const username = document.getElementById("username").value.trim();
-
-      if (username === "") {
-        alert("Enter username");
-        return;
-      }
-
+      if (username === "") { alert("Enter username first"); return; }
       currentRoom = roomId;
-      document.getElementById("lobbyScreen").classList.remove("active");
-      document.getElementById("chatScreen").classList.add("active");
+      showScreen("chatScreen");
       document.getElementById("roomTitle").textContent = roomName;
       listenForMessages();
     };
 
     window.goBack = function() {
       if (unsubscribe) unsubscribe();
-      document.getElementById("chatScreen").classList.remove("active");
-      document.getElementById("lobbyScreen").classList.add("active");
+      showScreen("lobbyScreen");
+    };
+
+    window.backToLobby = function() {
+      showScreen("lobbyScreen");
     };
 
     window.sendMessage = async function() {
       const input = document.getElementById("messageInput");
       const text = input.value.trim();
       const username = document.getElementById("username").value.trim();
-
-      if (text === "") return;
+      const avatar = document.getElementById("avatar").value;
+      if (text === "" || currentRoom === "") return;
 
       await addDoc(collection(db, "rooms", currentRoom, "messages"), {
-        username: username,
+        username: avatar + " " + username,
         text: text,
         createdAt: serverTimestamp()
       });
 
       input.value = "";
+      xp += 2;
+      messageCount += 1;
+      updateStats();
+    };
+
+    window.sendQuick = function(text) {
+      document.getElementById("messageInput").value = text;
+      sendMessage();
     };
 
     function listenForMessages() {
       const chatBox = document.getElementById("chatBox");
       const username = document.getElementById("username").value.trim();
-
       if (unsubscribe) unsubscribe();
 
       const q = query(collection(db, "rooms", currentRoom, "messages"), orderBy("createdAt"));
-
       unsubscribe = onSnapshot(q, function(snapshot) {
         chatBox.innerHTML = "";
-
         snapshot.forEach(function(doc) {
           const msg = doc.data();
           const div = document.createElement("div");
-
-          div.className = msg.username === username ? "message me" : "message other";
+          div.className = (msg.username || "").includes(username) ? "message me" : "message other";
           div.innerHTML = "<div class='sender'>" + escapeHTML(msg.username || "Unknown") + "</div>" + escapeHTML(msg.text || "");
           chatBox.appendChild(div);
         });
-
         chatBox.scrollTop = chatBox.scrollHeight;
       });
     }
+
+    window.claimDaily = function() {
+      if (messageCount >= 5) {
+        xp += 25;
+        messageCount = 0;
+        updateStats();
+        alert("Daily reward claimed! +25 XP");
+      } else {
+        alert("Send 5 messages first!");
+      }
+    };
+
+    window.openGame = function(game) {
+      const username = document.getElementById("username").value.trim();
+      if (username === "") { alert("Enter username first"); return; }
+      showScreen("gameScreen");
+      document.getElementById("gameResult").textContent = "";
+
+      if (game === "tap") startTapGame();
+      if (game === "guess") startGuessGame();
+      if (game === "rps") startRpsGame();
+      if (game === "poll") startPollGame();
+    };
+
+    function startTapGame() {
+      let score = 0;
+      let time = 10;
+      document.getElementById("gameTitle").textContent = "⚡ Speed Tap";
+      document.getElementById("gameArea").innerHTML = "<div class='tap-target' id='tapTarget'>TAP</div>";
+      document.getElementById("gameResult").textContent = "Time: 10 | Score: 0";
+
+      document.getElementById("tapTarget").onclick = function() {
+        score++;
+        document.getElementById("gameResult").textContent = "Time: " + time + " | Score: " + score;
+      };
+
+      const timer = setInterval(function() {
+        time--;
+        document.getElementById("gameResult").textContent = "Time: " + time + " | Score: " + score;
+        if (time <= 0) {
+          clearInterval(timer);
+          xp += score;
+          updateStats();
+          document.getElementById("gameArea").innerHTML = "<h2>Final Score: " + score + "</h2>";
+          document.getElementById("gameResult").textContent = "+" + score + " XP earned!";
+        }
+      }, 1000);
+    }
+
+    function startGuessGame() {
+      const secret = Math.floor(Math.random() * 10) + 1;
+      document.getElementById("gameTitle").textContent = "🔢 Number Guess";
+      document.getElementById("gameArea").innerHTML = "<div><p>Guess a number from 1 to 10</p><input id='guessInput' type='number' min='1' max='10'><br><br><button onclick='checkGuess(" + secret + ")'>Guess</button></div>";
+    }
+
+    window.checkGuess = function(secret) {
+      const guess = Number(document.getElementById("guessInput").value);
+      if (guess === secret) {
+        xp += 15;
+        updateStats();
+        document.getElementById("gameResult").textContent = "Correct! +15 XP";
+      } else {
+        document.getElementById("gameResult").textContent = "Nope! It was " + secret;
+      }
+    };
+
+    function startRpsGame() {
+      document.getElementById("gameTitle").textContent = "✊ Rock Paper Scissors";
+      document.getElementById("gameArea").innerHTML = "<div class='choice-row'><button onclick='playRps(\"rock\")'>✊ Rock</button><button onclick='playRps(\"paper\")'>✋ Paper</button><button onclick='playRps(\"scissors\")'>✌️ Scissors</button></div>";
+    }
+
+    window.playRps = function(player) {
+      const choices = ["rock", "paper", "scissors"];
+      const bot = choices[Math.floor(Math.random() * 3)];
+      let result = "Tie!";
+      if ((player === "rock" && bot === "scissors") || (player === "paper" && bot === "rock") || (player === "scissors" && bot === "paper")) {
+        result = "You win! +10 XP";
+        xp += 10;
+        updateStats();
+      } else if (player !== bot) {
+        result = "You lost!";
+      }
+      document.getElementById("gameResult").textContent = "You: " + player + " | Bot: " + bot + " — " + result;
+    };
+
+    function startPollGame() {
+      document.getElementById("gameTitle").textContent = "📊 Quick Poll";
+      document.getElementById("gameArea").innerHTML = "<div><input id='pollQuestion' placeholder='Ask a poll question'><br><br><button onclick='createPoll()'>Post Poll to Random Lobby</button></div>";
+    }
+
+    window.createPoll = async function() {
+      const question = document.getElementById("pollQuestion").value.trim();
+      const username = document.getElementById("username").value.trim();
+      const avatar = document.getElementById("avatar").value;
+      if (question === "") return;
+      await addDoc(collection(db, "rooms", "random", "messages"), {
+        username: avatar + " " + username,
+        text: "📊 POLL: " + question + " | Reply YES or NO!",
+        createdAt: serverTimestamp()
+      });
+      xp += 8;
+      updateStats();
+      document.getElementById("gameResult").textContent = "Poll posted to Random Lobby! +8 XP";
+    };
 
     function escapeHTML(text) {
       return String(text)
@@ -499,3 +664,4 @@
 
 </body>
 </html>
+
