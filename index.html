@@ -261,4 +261,114 @@
     // STEP 1: Replace this with YOUR Firebase config.
     const firebaseConfig = {
       apiKey: "PASTE_YOUR_API_KEY_HERE",
-      authDomain: "PASTE_YOUR_AUTH_DOMAI
+      authDomain: "PASTE_YOUR_AUTH_DOMAIN_HERE",
+      projectId: "PASTE_YOUR_PROJECT_ID_HERE",
+      storageBucket: "PASTE_YOUR_STORAGE_BUCKET_HERE",
+      messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID_HERE",
+      appId: "PASTE_YOUR_APP_ID_HERE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let currentRoomId = "";
+    let unsubscribeMessages = null;
+
+    window.enterRoom = function(roomId, roomName, emoji) {
+      const username = document.getElementById("username").value.trim();
+
+      if (username === "") {
+        alert("Please enter a username first!");
+        return;
+      }
+
+      currentRoomId = roomId;
+
+      document.getElementById("lobbyScreen").classList.remove("active");
+      document.getElementById("chatScreen").classList.add("active");
+      document.getElementById("roomTitle").textContent = emoji + " " + roomName;
+      document.getElementById("chatBox").innerHTML = "";
+
+      listenForMessages();
+    };
+
+    window.goBackToLobby = function() {
+      if (unsubscribeMessages) {
+        unsubscribeMessages();
+      }
+
+      document.getElementById("chatScreen").classList.remove("active");
+      document.getElementById("lobbyScreen").classList.add("active");
+      document.getElementById("messageInput").value = "";
+    };
+
+    window.sendMessage = async function() {
+      const input = document.getElementById("messageInput");
+      const username = document.getElementById("username").value.trim();
+      const text = input.value.trim();
+
+      if (text === "") return;
+      if (currentRoomId === "") return;
+
+      input.value = "";
+
+      await addDoc(collection(db, "rooms", currentRoomId, "messages"), {
+        username: username,
+        text: text,
+        createdAt: serverTimestamp()
+      });
+    };
+
+    function listenForMessages() {
+      const chatBox = document.getElementById("chatBox");
+      const username = document.getElementById("username").value.trim();
+
+      if (unsubscribeMessages) {
+        unsubscribeMessages();
+      }
+
+      const messagesRef = collection(db, "rooms", currentRoomId, "messages");
+      const messagesQuery = query(messagesRef, orderBy("createdAt"), limit(50));
+
+      unsubscribeMessages = onSnapshot(messagesQuery, function(snapshot) {
+        chatBox.innerHTML = "";
+
+        snapshot.forEach(function(doc) {
+          const message = doc.data();
+          const messageDiv = document.createElement("div");
+
+          if (message.username === username) {
+            messageDiv.className = "message me";
+          } else {
+            messageDiv.className = "message other";
+          }
+
+          const safeUsername = escapeHTML(message.username || "Unknown");
+          const safeText = escapeHTML(message.text || "");
+
+          messageDiv.innerHTML = "<div class='sender'>" + safeUsername + "</div>" + safeText;
+          chatBox.appendChild(messageDiv);
+        });
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+    }
+
+    function escapeHTML(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    document.getElementById("messageInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        sendMessage();
+      }
+    });
+  </script>
+
+</body>
+</html>
