@@ -8,200 +8,40 @@
       box-sizing: border-box;
     }
 
-    /* REPLACE YOUR BODY BACKGROUND WITH THIS */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #000000;
+      color: white;
+      min-height: 100vh;
+    }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #000000;
-  color: white;
-  min-height: 100vh;
-  overflow: hidden;
-}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0,140,255,0.18), transparent 25%),
+        radial-gradient(circle at 80% 30%, rgba(180,0,255,0.18), transparent 25%),
+        radial-gradient(circle at 50% 80%, rgba(255,0,120,0.12), transparent 25%);
+      animation: pulseBackground 8s infinite alternate;
+      z-index: -2;
+    }
 
-/* ADD THIS */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: -1;
+    }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-
-  background:
-    radial-gradient(circle at 20% 20%, rgba(0,140,255,0.15), transparent 25%),
-    radial-gradient(circle at 80% 30%, rgba(180,0,255,0.15), transparent 25%),
-    radial-gradient(circle at 50% 80%, rgba(255,0,120,0.12), transparent 25%);
-
-  animation: pulseBackground 8s infinite alternate;
-  z-index: -2;
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-
-  background-size: 40px 40px;
-
-  z-index: -1;
-}
-
-@keyframes pulseBackground {
-  from {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-
-  to {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-}
-
-/* LOADING SCREEN */
-
-#loadingScreen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-/* LOADING CIRCLE */
-
-.loaderRing {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-
-  border: 6px solid rgba(255,255,255,0.08);
-  border-top: 6px solid #8a2eff;
-  border-right: 6px solid #00aaff;
-
-  animation: spin 1.1s linear infinite;
-
-  margin-bottom: 30px;
-
-  box-shadow:
-    0 0 20px rgba(138,46,255,0.6),
-    0 0 40px rgba(0,170,255,0.4);
-}
-
-@keyframes spin {
-
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-
-}
-
-/* LOADING STEPS */
-
-.loadingSteps {
-  margin-top: 20px;
-  width: 320px;
-}
-
-.loadingStep {
-  display: flex;
-  justify-content: space-between;
-
-  margin: 14px 0;
-
-  color: rgba(255,255,255,0.85);
-
-  font-size: 15px;
-
-  letter-spacing: 0.5px;
-}
-
-.loadingDot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-
-  background: #444;
-
-  animation: blink 1.2s infinite;
-}
-
-.loadingDot.active {
-  background: #8a2eff;
-
-  box-shadow:
-    0 0 12px #8a2eff,
-    0 0 22px #00aaff;
-}
-
-@keyframes blink {
-
-  0% {
-    opacity: 0.5;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0.5;
-  }
-
-}
-
-/* LOADING BAR */
-
-.loadingBarContainer {
-  width: 340px;
-  height: 12px;
-
-  background: rgba(255,255,255,0.08);
-
-  border-radius: 30px;
-
-  overflow: hidden;
-
-  margin-top: 30px;
-}
-
-.loadingBar {
-  height: 100%;
-  width: 0%;
-
-  background:
-    linear-gradient(
-      90deg,
-      #8a2eff,
-      #00aaff
-    );
-
-  border-radius: 30px;
-
-  animation: loadBar 5s forwards;
-
-  box-shadow:
-    0 0 18px #8a2eff,
-    0 0 28px #00aaff;
-}
-
-@keyframes loadBar {
-
-  from {
-    width: 0%;
-  }
-
-  to {
-    width: 100%;
-  }
-
-}
+    @keyframes pulseBackground {
+      from { transform: scale(1); opacity: 0.7; }
+      to { transform: scale(1.1); opacity: 1; }
     }
 
     .screen {
@@ -210,77 +50,184 @@ body::after {
       padding: 30px;
     }
 
-    .active {
+    .screen.active {
       display: block;
     }
 
-    .lobby-container {
-      max-width: 900px;
-      margin: 40px auto;
+    #loadingScreen.active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       text-align: center;
     }
 
+    .loading-card {
+      width: 100%;
+      max-width: 520px;
+      padding: 30px;
+    }
+
     .title {
-      font-size: 48px;
+      font-size: 52px;
       margin-bottom: 10px;
-      background: linear-gradient(90deg, #7afcff, #feff9c, #ff65a3);
+      background: linear-gradient(90deg, #8a2eff, #00aaff, #ff65a3);
       -webkit-background-clip: text;
       color: transparent;
+      text-shadow: 0 0 35px rgba(138,46,255,0.35);
     }
 
     .subtitle {
       color: #d5d5d5;
-      margin-bottom: 35px;
+      margin-bottom: 28px;
       font-size: 18px;
     }
 
+    .loaderRing {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 7px solid rgba(255,255,255,0.08);
+      border-top: 7px solid #8a2eff;
+      border-right: 7px solid #00aaff;
+      animation: spin 1.1s linear infinite;
+      margin: 25px auto;
+      box-shadow:
+        0 0 20px rgba(138,46,255,0.6),
+        0 0 40px rgba(0,170,255,0.4);
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .loadingSteps {
+      margin: 22px auto;
+      width: 340px;
+      max-width: 100%;
+      text-align: left;
+    }
+
+    .loadingStep {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 14px 0;
+      color: rgba(255,255,255,0.85);
+      font-size: 15px;
+      letter-spacing: 0.4px;
+    }
+
+    .loadingDot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #333;
+      border: 1px solid #555;
+    }
+
+    .loadingDot.active {
+      background: #8a2eff;
+      box-shadow: 0 0 12px #8a2eff, 0 0 22px #00aaff;
+      animation: blink 1.2s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.45; }
+      50% { opacity: 1; }
+      100% { opacity: 0.45; }
+    }
+
+    .loadingBarContainer {
+      width: 360px;
+      max-width: 100%;
+      height: 12px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 30px;
+      overflow: hidden;
+      margin: 30px auto 10px;
+    }
+
+    .loadingBar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #8a2eff, #00aaff);
+      border-radius: 30px;
+      animation: loadBar 4s forwards;
+      box-shadow: 0 0 18px #8a2eff, 0 0 28px #00aaff;
+    }
+
+    @keyframes loadBar {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+
+    .lobby-container {
+      max-width: 950px;
+      margin: 40px auto;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 22px;
+      padding: 35px;
+      background: rgba(255,255,255,0.035);
+      box-shadow: 0 0 40px rgba(0,170,255,0.08);
+    }
+
     .name-box input {
-      padding: 14px;
-      width: 280px;
-      border-radius: 25px;
-      border: none;
+      padding: 15px 20px;
+      width: 320px;
+      max-width: 100%;
+      border-radius: 30px;
+      border: 1px solid rgba(138,46,255,0.8);
       font-size: 16px;
       outline: none;
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 35px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      box-shadow: 0 0 18px rgba(138,46,255,0.25);
     }
 
     .room-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 22px;
     }
 
     .room-card {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.18);
       border-radius: 22px;
-      padding: 25px;
+      padding: 26px;
       cursor: pointer;
       transition: 0.3s;
+      min-height: 170px;
     }
 
     .room-card:hover {
-      transform: translateY(-8px);
-      background: rgba(255,255,255,0.22);
+      transform: translateY(-8px) scale(1.02);
+      background: rgba(255,255,255,0.11);
+      box-shadow: 0 0 30px rgba(0,170,255,0.25);
     }
 
     .room-emoji {
-      font-size: 45px;
+      font-size: 46px;
       margin-bottom: 10px;
     }
 
     .chat-page {
-      max-width: 800px;
+      max-width: 850px;
       margin: 25px auto;
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
       border-radius: 25px;
       overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 0 40px rgba(0,170,255,0.12);
     }
 
     .chat-header {
       padding: 18px 20px;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0,0,0,0.55);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -290,7 +237,6 @@ body::after {
       height: 470px;
       padding: 20px;
       overflow-y: auto;
-      background: rgba(255,255,255,0.08);
     }
 
     .message {
@@ -306,11 +252,13 @@ body::after {
       float: right;
       background: linear-gradient(135deg, #4facfe, #00f2fe);
       color: black;
+      font-weight: bold;
     }
 
     .other {
       float: left;
-      background: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.16);
+      color: white;
     }
 
     .sender {
@@ -322,7 +270,7 @@ body::after {
     .input-area {
       display: flex;
       padding: 15px;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0,0,0,0.55);
       gap: 10px;
     }
 
@@ -345,7 +293,8 @@ body::after {
     }
 
     .send-button {
-      background: #feff9c;
+      background: #00aaff;
+      color: white;
     }
 
     .back-button {
@@ -356,175 +305,102 @@ body::after {
 </head>
 
 <body>
-<div id="lobbyScreen" class="screen">
 
-  <div class="lobby-container">
+  <!-- LOADING SCREEN -->
+  <div id="loadingScreen" class="screen active">
+    <div class="loading-card">
+      <h1 class="title">ChatVerse</h1>
+      <p id="loadingText" class="subtitle">Loading Room...</p>
 
-    <h1 class="title">ChatVerse Live</h1>
+      <div class="loaderRing"></div>
 
-    <p id="loadingText" class="subtitle">
-      Loading Room...
-    </p>
-
-    <div class="loaderRing"></div>
-
-    <div class="loadingSteps">
-
-      <div class="loadingStep">
-        <span>Connecting to servers...</span>
-        <div class="loadingDot active"></div>
+      <div class="loadingSteps">
+        <div class="loadingStep">
+          <span>Connecting to servers...</span>
+          <div class="loadingDot active"></div>
+        </div>
+        <div class="loadingStep">
+          <span>Waiting for servers...</span>
+          <div class="loadingDot active"></div>
+        </div>
+        <div class="loadingStep">
+          <span>Loading HTML...</span>
+          <div class="loadingDot active"></div>
+        </div>
+        <div class="loadingStep">
+          <span>Loading resources...</span>
+          <div class="loadingDot active"></div>
+        </div>
+        <div class="loadingStep">
+          <span>Almost ready...</span>
+          <div class="loadingDot active"></div>
+        </div>
       </div>
 
-      <div class="loadingStep">
-        <span>Waiting for servers...</span>
-        <div class="loadingDot active"></div>
+      <div class="loadingBarContainer">
+        <div class="loadingBar"></div>
       </div>
-
-      <div class="loadingStep">
-        <span>Loading HTML...</span>
-        <div class="loadingDot active"></div>
-      </div>
-
-      <div class="loadingStep">
-        <span>Loading resources...</span>
-        <div class="loadingDot"></div>
-      </div>
-
-      <div class="loadingStep">
-        <span>Almost ready...</span>
-        <div class="loadingDot"></div>
-      </div>
-
     </div>
-
-    <div class="loadingBarContainer">
-      <div class="loadingBar"></div>
-    </div>
-
   </div>
 
-</div>
   <!-- LOBBY -->
-  <div id="lobbyScreen" class="screen active">
-
+  <div id="lobbyScreen" class="screen">
     <div class="lobby-container">
-
       <h1 class="title">ChatVerse Live</h1>
-
-      <p class="subtitle">
-        Choose a room and chat live
-      </p>
+      <p class="subtitle">Choose a room and chat live</p>
 
       <div class="name-box">
-        <input
-          type="text"
-          id="username"
-          placeholder="Enter username"
-        >
+        <input type="text" id="username" placeholder="Enter username">
       </div>
 
       <div class="room-grid">
-
-        <div class="room-card"
-          onclick="enterRoom('gaming','🎮 Gaming Lobby')">
-
+        <div class="room-card" onclick="enterRoom('gaming','🎮 Gaming Lobby')">
           <div class="room-emoji">🎮</div>
           <h2>Gaming Lobby</h2>
-
+          <p>Talk about games</p>
         </div>
 
-        <div class="room-card"
-          onclick="enterRoom('sports','⚾ Sports Lobby')">
-
+        <div class="room-card" onclick="enterRoom('sports','⚾ Sports Lobby')">
           <div class="room-emoji">⚾</div>
           <h2>Sports Lobby</h2>
-
+          <p>Talk about sports</p>
         </div>
 
-        <div class="room-card"
-          onclick="enterRoom('school','📚 School Lobby')">
-
+        <div class="room-card" onclick="enterRoom('school','📚 School Lobby')">
           <div class="room-emoji">📚</div>
           <h2>School Lobby</h2>
-
+          <p>Study and discuss</p>
         </div>
 
-        <div class="room-card"
-          onclick="enterRoom('random','💬 Random Lobby')">
-
+        <div class="room-card" onclick="enterRoom('random','💬 Random Lobby')">
           <div class="room-emoji">💬</div>
           <h2>Random Lobby</h2>
-
+          <p>Chat about anything</p>
         </div>
-
       </div>
-
     </div>
-
   </div>
 
   <!-- CHAT -->
   <div id="chatScreen" class="screen">
-
     <div class="chat-page">
-
       <div class="chat-header">
-
         <h1 id="roomTitle">Room</h1>
-
-        <button
-          class="back-button"
-          onclick="goBack()">
-
-          Back
-
-        </button>
-
+        <button class="back-button" onclick="goBack()">Back</button>
       </div>
 
-      <div
-        class="chat-box"
-        id="chatBox">
-
-      </div>
+      <div class="chat-box" id="chatBox"></div>
 
       <div class="input-area">
-
-        <input
-          type="text"
-          id="messageInput"
-          placeholder="Type message..."
-        >
-
-        <button
-          class="send-button"
-          onclick="sendMessage()">
-
-          Send
-
-        </button>
-
+        <input type="text" id="messageInput" placeholder="Type message...">
+        <button class="send-button" onclick="sendMessage()">Send</button>
       </div>
-
     </div>
-
   </div>
 
   <script type="module">
-
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      query,
-      orderBy,
-      onSnapshot,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDY0B4m2ul_SK4cHFydQdn6GEPVtUhqESg",
@@ -536,180 +412,89 @@ body::after {
     };
 
     const app = initializeApp(firebaseConfig);
-
     const db = getFirestore(app);
-setTimeout(() => {
 
-  document
-    .getElementById("loadingScreen")
-    .classList
-    .remove("active");
+    setTimeout(function() {
+      document.getElementById("loadingScreen").classList.remove("active");
+      document.getElementById("lobbyScreen").classList.add("active");
+    }, 4200);
 
-  document
-    .getElementById("lobbyScreen")
-    .classList
-    .add("active");
-
-}, 5000);
     let currentRoom = "";
-
     let unsubscribe = null;
 
     window.enterRoom = function(roomId, roomName) {
+      const username = document.getElementById("username").value.trim();
 
-      const username =
-        document.getElementById("username")
-        .value
-        .trim();
-
-      if(username === "") {
+      if (username === "") {
         alert("Enter username");
         return;
       }
 
       currentRoom = roomId;
-
-      document
-        .getElementById("lobbyScreen")
-        .classList
-        .remove("active");
-
-      document
-        .getElementById("chatScreen")
-        .classList
-        .add("active");
-
-      document
-        .getElementById("roomTitle")
-        .textContent = roomName;
-
+      document.getElementById("lobbyScreen").classList.remove("active");
+      document.getElementById("chatScreen").classList.add("active");
+      document.getElementById("roomTitle").textContent = roomName;
       listenForMessages();
-
     };
 
     window.goBack = function() {
-
-      document
-        .getElementById("chatScreen")
-        .classList
-        .remove("active");
-
-      document
-        .getElementById("lobbyScreen")
-        .classList
-        .add("active");
-
+      if (unsubscribe) unsubscribe();
+      document.getElementById("chatScreen").classList.remove("active");
+      document.getElementById("lobbyScreen").classList.add("active");
     };
 
     window.sendMessage = async function() {
+      const input = document.getElementById("messageInput");
+      const text = input.value.trim();
+      const username = document.getElementById("username").value.trim();
 
-      const input =
-        document.getElementById("messageInput");
+      if (text === "") return;
 
-      const text =
-        input.value.trim();
-
-      const username =
-        document.getElementById("username")
-        .value
-        .trim();
-
-      if(text === "") return;
-
-      await addDoc(
-
-        collection(
-          db,
-          "rooms",
-          currentRoom,
-          "messages"
-        ),
-
-        {
-          username: username,
-          text: text,
-          createdAt: serverTimestamp()
-        }
-
-      );
+      await addDoc(collection(db, "rooms", currentRoom, "messages"), {
+        username: username,
+        text: text,
+        createdAt: serverTimestamp()
+      });
 
       input.value = "";
-
     };
 
     function listenForMessages() {
+      const chatBox = document.getElementById("chatBox");
+      const username = document.getElementById("username").value.trim();
 
-      const chatBox =
-        document.getElementById("chatBox");
+      if (unsubscribe) unsubscribe();
 
-      const username =
-        document.getElementById("username")
-        .value
-        .trim();
+      const q = query(collection(db, "rooms", currentRoom, "messages"), orderBy("createdAt"));
 
-      if(unsubscribe) {
-        unsubscribe();
-      }
-
-      const q = query(
-
-        collection(
-          db,
-          "rooms",
-          currentRoom,
-          "messages"
-        ),
-
-        orderBy("createdAt")
-
-      );
-
-      unsubscribe = onSnapshot(q, (snapshot) => {
-
+      unsubscribe = onSnapshot(q, function(snapshot) {
         chatBox.innerHTML = "";
 
-        snapshot.forEach((doc) => {
-
+        snapshot.forEach(function(doc) {
           const msg = doc.data();
+          const div = document.createElement("div");
 
-          const div =
-            document.createElement("div");
-
-          if(msg.username === username) {
-            div.className = "message me";
-          } else {
-            div.className = "message other";
-          }
-
-          div.innerHTML = `
-            <div class="sender">
-              ${msg.username}
-            </div>
-
-            ${msg.text}
-          `;
-
+          div.className = msg.username === username ? "message me" : "message other";
+          div.innerHTML = "<div class='sender'>" + escapeHTML(msg.username || "Unknown") + "</div>" + escapeHTML(msg.text || "");
           chatBox.appendChild(div);
-
         });
 
-        chatBox.scrollTop =
-          chatBox.scrollHeight;
-
+        chatBox.scrollTop = chatBox.scrollHeight;
       });
-
     }
 
-    document
-      .getElementById("messageInput")
-      .addEventListener("keydown", function(e){
+    function escapeHTML(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
 
-        if(e.key === "Enter") {
-          sendMessage();
-        }
-
-      });
-
+    document.getElementById("messageInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") sendMessage();
+    });
   </script>
 
 </body>
