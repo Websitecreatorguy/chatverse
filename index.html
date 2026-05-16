@@ -7,727 +7,701 @@
   <style>
     * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #000;
-      color: white;
-      min-height: 100vh;
-      overflow-x: hidden;
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#000;
+      color:white;
+      overflow-x:hidden;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
       background:
-        radial-gradient(circle at 15% 15%, rgba(0,170,255,0.18), transparent 24%),
-        radial-gradient(circle at 85% 25%, rgba(150,0,255,0.19), transparent 26%),
-        radial-gradient(circle at 50% 90%, rgba(255,0,120,0.13), transparent 30%);
-      animation: pulseBg 8s infinite alternate;
-      z-index: -2;
+      radial-gradient(circle at 20% 20%,rgba(0,170,255,.2),transparent 25%),
+      radial-gradient(circle at 80% 20%,rgba(140,0,255,.2),transparent 25%),
+      radial-gradient(circle at 50% 80%,rgba(255,0,120,.15),transparent 30%);
+      z-index:-2;
     }
 
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
       background-image:
-        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-      background-size: 42px 42px;
-      z-index: -1;
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size:40px 40px;
+      z-index:-1;
     }
 
-    @keyframes pulseBg {
-      from { transform: scale(1); opacity: 0.75; }
-      to { transform: scale(1.08); opacity: 1; }
+    .screen{
+      display:none;
+      min-height:100vh;
+      padding:20px;
     }
 
-    .screen { display: none; min-height: 100vh; padding: 24px; }
-    .screen.active { display: block; }
-
-    #loadingScreen.active {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+    .active{
+      display:block;
     }
 
-    .title {
-      font-size: clamp(42px, 8vw, 82px);
-      margin: 0 0 10px;
-      background: linear-gradient(90deg, #8a2eff, #00aaff, #ff2fb3, #ffffff);
-      -webkit-background-clip: text;
-      color: transparent;
-      letter-spacing: -2px;
+    #loadingScreen.active{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
     }
 
-    .subtitle { color: #d8d8d8; font-size: 18px; }
-
-    .loaderRing {
-      width: 125px;
-      height: 125px;
-      border-radius: 50%;
-      border: 7px solid rgba(255,255,255,0.08);
-      border-top: 7px solid #8a2eff;
-      border-right: 7px solid #00aaff;
-      animation: spin 1.1s linear infinite;
-      margin: 28px auto;
-      box-shadow: 0 0 25px rgba(138,46,255,0.7), 0 0 45px rgba(0,170,255,0.45);
+    .title{
+      font-size:72px;
+      margin:0;
+      background:linear-gradient(90deg,#00aaff,#8a2eff,#ff2fb3);
+      -webkit-background-clip:text;
+      color:transparent;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .loadingBarContainer {
-      width: 340px;
-      max-width: 100%;
-      height: 12px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 30px;
-      overflow: hidden;
-      margin: 25px auto;
+    .subtitle{
+      color:#ccc;
     }
 
-    .loadingBar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #8a2eff, #00aaff, #ff2fb3);
-      border-radius: 30px;
-      animation: loadBar 3.5s forwards;
+    .loader{
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      border:6px solid rgba(255,255,255,.08);
+      border-top:6px solid #00aaff;
+      border-right:6px solid #8a2eff;
+      animation:spin 1s linear infinite;
+      margin:30px auto;
     }
 
-    @keyframes loadBar { to { width: 100%; } }
-
-    .app-shell { max-width: 1160px; margin: 0 auto; }
-
-    .glass {
-      background: rgba(255,255,255,0.055);
-      border: 1px solid rgba(255,255,255,0.16);
-      border-radius: 26px;
-      box-shadow: 0 0 45px rgba(0,170,255,0.10);
-      backdrop-filter: blur(8px);
+    @keyframes spin{
+      to{transform:rotate(360deg);}
     }
 
-    .hero {
-      padding: 36px;
-      text-align: center;
-      margin-top: 25px;
+    .bar{
+      width:320px;
+      height:10px;
+      background:rgba(255,255,255,.08);
+      border-radius:30px;
+      overflow:hidden;
+      margin:auto;
     }
 
-    .name-row {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 28px 0;
+    .barFill{
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg,#00aaff,#8a2eff,#ff2fb3);
+      animation:load 3.5s forwards;
     }
 
-    input, select {
-      padding: 14px 18px;
-      border-radius: 30px;
-      border: 1px solid rgba(0,170,255,0.55);
-      background: rgba(0,0,0,0.65);
-      color: white;
-      font-size: 16px;
-      outline: none;
+    @keyframes load{
+      to{width:100%;}
     }
 
-    button {
-      border: none;
-      border-radius: 30px;
-      padding: 12px 18px;
-      font-weight: bold;
-      cursor: pointer;
-      color: white;
-      background: linear-gradient(135deg, #8a2eff, #00aaff);
-      transition: 0.2s;
+    .glass{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:24px;
+      backdrop-filter:blur(10px);
     }
 
-    button:hover { transform: translateY(-2px); opacity: 0.9; }
-
-    .stats {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin: 18px 0 0;
+    .hero{
+      max-width:1000px;
+      margin:auto;
+      padding:40px;
+      text-align:center;
+      margin-top:30px;
     }
 
-    .pill {
-      padding: 9px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.13);
+    input{
+      padding:14px 18px;
+      border-radius:30px;
+      border:1px solid rgba(0,170,255,.5);
+      background:#000;
+      color:white;
+      width:250px;
+      margin-top:20px;
     }
 
-    .section-title { font-size: 28px; margin: 32px 0 16px; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
+    button{
+      padding:12px 18px;
+      border:none;
+      border-radius:30px;
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
+      background:linear-gradient(135deg,#8a2eff,#00aaff);
     }
 
-    .card {
-      padding: 22px;
-      min-height: 160px;
-      cursor: pointer;
-      transition: 0.25s;
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:20px;
+      margin-top:30px;
     }
 
-    .card:hover {
-      transform: translateY(-7px) scale(1.015);
-      box-shadow: 0 0 35px rgba(0,170,255,0.22);
+    .card{
+      padding:24px;
+      cursor:pointer;
+      transition:.2s;
     }
 
-    .emoji { font-size: 46px; margin-bottom: 8px; }
-    .muted { color: #cfcfcf; font-size: 14px; line-height: 1.5; }
-
-    .chat-layout {
-      display: grid;
-      grid-template-columns: 1.5fr 0.9fr;
-      gap: 18px;
-      margin-top: 22px;
+    .card:hover{
+      transform:translateY(-5px);
     }
 
-    @media (max-width: 850px) { .chat-layout { grid-template-columns: 1fr; } }
-
-    .chat-page { overflow: hidden; }
-
-    .chat-header {
-      padding: 17px 18px;
-      background: rgba(0,0,0,0.55);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
+    .chatLayout{
+      display:grid;
+      grid-template-columns:1.4fr .8fr;
+      gap:20px;
+      margin-top:20px;
     }
 
-    .chat-box { height: 470px; padding: 18px; overflow-y: auto; }
-
-    .message {
-      margin: 12px 0;
-      padding: 12px 15px;
-      border-radius: 18px;
-      max-width: 78%;
-      clear: both;
-      word-wrap: break-word;
-      animation: pop 0.18s ease-out;
+    @media(max-width:850px){
+      .chatLayout{
+        grid-template-columns:1fr;
+      }
     }
 
-    @keyframes pop {
-      from { transform: scale(0.96); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    .chatBox{
+      height:500px;
+      overflow-y:auto;
+      padding:20px;
     }
 
-    .me { float: right; color: #050505; background: linear-gradient(135deg, #4facfe, #00f2fe); font-weight: bold; }
-    .other { float: left; background: rgba(255,255,255,0.15); }
-    .sender { font-size: 12px; opacity: 0.78; margin-bottom: 4px; }
-
-    .input-area { display: flex; gap: 10px; padding: 14px; background: rgba(0,0,0,0.55); }
-    .input-area input { flex: 1; }
-
-    .side-panel { padding: 18px; }
-    .mini-box { padding: 16px; border-radius: 20px; margin-bottom: 14px; background: rgba(0,0,0,0.28); border: 1px solid rgba(255,255,255,0.11); }
-
-    .danger-note { color: #ffd2d2; font-size: 13px; line-height: 1.45; margin-top: 14px; }
-
-    .game-wrap { padding: 24px; margin-top: 24px; }
-
-    .game-topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 16px;
+    .message{
+      margin:10px 0;
+      padding:12px 16px;
+      border-radius:18px;
+      max-width:75%;
+      clear:both;
     }
 
-    canvas {
-      width: 100%;
-      max-width: 950px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: #050509;
-      box-shadow: 0 0 40px rgba(0,170,255,0.18);
+    .me{
+      float:right;
+      background:linear-gradient(135deg,#4facfe,#00f2fe);
+      color:black;
+      font-weight:bold;
     }
 
-    .game-controls {
-      text-align: center;
-      margin-top: 18px;
-      color: #ddd;
+    .other{
+      float:left;
+      background:rgba(255,255,255,.12);
     }
 
-    .leaderboard-row {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(255,255,255,0.09);
-      padding: 9px 0;
-      font-size: 14px;
+    .sender{
+      font-size:12px;
+      opacity:.7;
+      margin-bottom:4px;
+    }
+
+    .inputArea{
+      display:flex;
+      gap:10px;
+      padding:14px;
+    }
+
+    .inputArea input{
+      flex:1;
+      margin:0;
+    }
+
+    canvas{
+      width:100%;
+      max-width:950px;
+      display:block;
+      margin:auto;
+      border-radius:20px;
+      background:#050509;
+      border:1px solid rgba(255,255,255,.1);
     }
   </style>
 </head>
 
 <body>
 
-  <div id="loadingScreen" class="screen active">
-    <div>
-      <h1 class="title">ChatVerse Dash</h1>
-      <p class="subtitle">Loading servers • Building rooms • Rendering dash</p>
-      <div class="loaderRing"></div>
-      <div class="loadingBarContainer"><div class="loadingBar"></div></div>
-      <p class="muted">Press space to jump. Survive the spikes.</p>
+<div id="loadingScreen" class="screen active">
+  <div>
+    <h1 class="title">ChatVerse Dash</h1>
+    <p class="subtitle">Loading servers • Loading rooms • Rendering dash</p>
+    <div class="loader"></div>
+    <div class="bar"><div class="barFill"></div></div>
+  </div>
+</div>
+
+<div id="lobbyScreen" class="screen">
+
+  <div class="hero glass">
+
+    <h1 class="title">ChatVerse Dash</h1>
+
+    <p class="subtitle">
+      Live chat + Neon Dash
+    </p>
+
+    <input id="username" placeholder="Enter username">
+
+    <div class="cards">
+
+      <div class="card glass" onclick="enterRoom('gaming','Gaming Lobby')">
+        <h2>🎮 Gaming</h2>
+        <p>Talk games and scores</p>
+      </div>
+
+      <div class="card glass" onclick="enterRoom('sports','Sports Lobby')">
+        <h2>⚾ Sports</h2>
+        <p>Baseball and sports chat</p>
+      </div>
+
+      <div class="card glass" onclick="openDash()">
+        <h2>🟦 Neon Dash</h2>
+        <p>Geometry Dash style runner</p>
+      </div>
+
     </div>
+
   </div>
 
-  <div id="lobbyScreen" class="screen">
-    <div class="app-shell">
-      <div class="hero glass">
-        <h1 class="title">ChatVerse Dash</h1>
-        <p class="subtitle">Live chat + neon dash runner + leaderboard</p>
+</div>
 
-        <div class="name-row">
-          <input id="username" placeholder="Enter username">
-          <select id="avatar">
-            <option>😎</option><option>🔥</option><option>⚾</option><option>🎮</option><option>👑</option><option>🚀</option>
-          </select>
-        </div>
+<div id="chatScreen" class="screen">
 
-        <div class="stats">
-          <div class="pill">⭐ XP: <span id="xpCount">0</span></div>
-          <div class="pill">💬 Messages: <span id="messageCount">0</span></div>
-          <div class="pill">🏆 Best Dash: <span id="bestScore">0</span></div>
-        </div>
+  <div class="chatLayout">
 
-        <p class="danger-note">Public chat safety: do not post your real full name, address, phone number, school, or passwords.</p>
+    <div class="glass">
+
+      <div style="padding:20px;display:flex;justify-content:space-between;">
+        <h2 id="roomTitle">Room</h2>
+        <button onclick="goBack()">Back</button>
       </div>
 
-      <h2 class="section-title">Live Chat Rooms</h2>
-      <div class="grid">
-        <div class="card glass" onclick="enterRoom('gaming','🎮 Gaming Lobby')"><div class="emoji">🎮</div><h2>Gaming</h2><p class="muted">Game talk, scores, clips, challenges.</p></div>
-        <div class="card glass" onclick="enterRoom('sports','⚾ Sports Lobby')"><div class="emoji">⚾</div><h2>Sports</h2><p class="muted">Baseball and all sports.</p></div>
-        <div class="card glass" onclick="enterRoom('school','📚 School Lobby')"><div class="emoji">📚</div><h2>School</h2><p class="muted">Homework, study, random school talk.</p></div>
-        <div class="card glass" onclick="enterRoom('random','💬 Random Lobby')"><div class="emoji">💬</div><h2>Random</h2><p class="muted">General chat and announcements.</p></div>
+      <div class="chatBox" id="chatBox"></div>
+
+      <div class="inputArea">
+        <input id="messageInput" placeholder="Type message...">
+        <button onclick="sendMessage()">Send</button>
       </div>
 
-      <h2 class="section-title">Main Game</h2>
-      <div class="grid">
-        <div class="card glass" onclick="openDash()"><div class="emoji">🟦</div><h2>Neon Dash</h2><p class="muted">A fast cube runner. Space/click/tap to jump. Survive as long as possible.</p></div>
-        <div class="card glass" onclick="enterRoom('scores','🏆 Scores Lobby')"><div class="emoji">🏆</div><h2>Scores Lobby</h2><p class="muted">Post wins and challenge friends.</p></div>
-      </div>
     </div>
+
+    <div class="glass" style="padding:20px;">
+      <h2>Player</h2>
+      <p>⭐ XP: <span id="xp">0</span></p>
+      <p>🏆 Best: <span id="best">0</span></p>
+
+      <button onclick="openDash()">
+        Play Neon Dash
+      </button>
+    </div>
+
   </div>
 
-  <div id="chatScreen" class="screen">
-    <div class="app-shell">
-      <div class="chat-layout">
-        <div class="chat-page glass">
-          <div class="chat-header">
-            <h2 id="roomTitle">Room</h2>
-            <button onclick="goBack()">Back</button>
-          </div>
-          <div class="chat-box" id="chatBox"></div>
-          <div class="input-area">
-            <input id="messageInput" placeholder="Type message...">
-            <button onclick="sendMessage()">Send</button>
-          </div>
-        </div>
+</div>
 
-        <div class="side-panel glass">
-          <h2>Player Panel</h2>
-          <div class="mini-box"><b>Your Stats</b><p>⭐ XP: <span id="sideXp">0</span></p><p>💬 Messages: <span id="sideMessages">0</span></p><p>🏆 Best Dash: <span id="sideBest">0</span></p></div>
-          <div class="mini-box"><b>Quick Send</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;"><button onclick="sendQuick('GG')">GG</button><button onclick="sendQuick('W')">W</button><button onclick="sendQuick('New high score!')">Score</button></div></div>
-          <div class="mini-box"><b>Play</b><p class="muted">Jump into Neon Dash and post your score.</p><button onclick="openDash()">Open Neon Dash</button></div>
-        </div>
+<div id="dashScreen" class="screen">
+
+  <div class="hero glass">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <div>
+        <h1>🟦 Neon Dash</h1>
+        <p>Press SPACE or click to jump</p>
+      </div>
+
+      <div>
+        <button onclick="startGame()">Restart</button>
+        <button onclick="backToLobby()">Lobby</button>
       </div>
     </div>
-  </div>
 
-  <div id="dashScreen" class="screen">
-    <div class="app-shell">
-      <div class="game-wrap glass">
-        <div class="game-topbar">
-          <div>
-            <h1 style="margin:0;">🟦 Neon Dash</h1>
-            <p class="muted">Space / click / tap to jump. Avoid spikes.</p>
-          </div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button onclick="startDashGame()">Restart</button>
-            <button onclick="backToLobby()">Lobby</button>
-          </div>
-        </div>
+    <canvas id="game" width="950" height="420"></canvas>
 
-        <canvas id="dashCanvas" width="950" height="430"></canvas>
-
-        <div class="game-controls">
-          <div class="stats">
-            <div class="pill">Score: <span id="dashScore">0</span></div>
-            <div class="pill">Best: <span id="dashBest">0</span></div>
-            <div class="pill">Speed: <span id="dashSpeed">1</span>x</div>
-          </div>
-          <p id="dashStatus" class="subtitle">Press Start, then jump.</p>
-        </div>
-      </div>
-
-      <h2 class="section-title">Leaderboard</h2>
-      <div class="glass" style="padding:18px;" id="leaderboardBox">
-        <p class="muted">Loading scores...</p>
-      </div>
+    <div style="margin-top:20px;">
+      <p>Score: <span id="score">0</span></p>
     </div>
+
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+</div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDY0B4m2ul_SK4cHFydQdn6GEPVtUhqESg",
-      authDomain: "chatverse-eb340.firebaseapp.com",
-      projectId: "chatverse-eb340",
-      storageBucket: "chatverse-eb340.firebasestorage.app",
-      messagingSenderId: "537889766475",
-      appId: "1:537889766475:web:e14eb4e07e032ea8d761ce"
-    };
+<script type="module">
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-    let currentRoom = "";
-    let unsubscribe = null;
-    let unsubscribeScores = null;
-    let xp = Number(localStorage.getItem("chatverseXP") || 0);
-    let messageCount = Number(localStorage.getItem("chatverseMessages") || 0);
-    let bestDash = Number(localStorage.getItem("chatverseBestDash") || 0);
+import {
+getFirestore,
+collection,
+addDoc,
+query,
+orderBy,
+onSnapshot,
+serverTimestamp
+}
 
-    function updateStats() {
-      document.getElementById("xpCount").textContent = xp;
-      document.getElementById("messageCount").textContent = messageCount;
-      document.getElementById("bestScore").textContent = bestDash;
-      document.getElementById("sideXp").textContent = xp;
-      document.getElementById("sideMessages").textContent = messageCount;
-      document.getElementById("sideBest").textContent = bestDash;
-      document.getElementById("dashBest").textContent = bestDash;
-      localStorage.setItem("chatverseXP", xp);
-      localStorage.setItem("chatverseMessages", messageCount);
-      localStorage.setItem("chatverseBestDash", bestDash);
-    }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    setTimeout(function() {
-      document.getElementById("loadingScreen").classList.remove("active");
-      document.getElementById("lobbyScreen").classList.add("active");
-      updateStats();
-    }, 3700);
+const firebaseConfig = {
 
-    function showScreen(id) {
-      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-    }
+apiKey: "AIzaSyDY0B4m2ul_SK4cHFydQdn6GEPVtUhqESg",
 
-    function getPlayerName() {
-      const username = document.getElementById("username").value.trim();
-      const avatar = document.getElementById("avatar").value;
-      return avatar + " " + username;
-    }
+authDomain: "chatverse-eb340.firebaseapp.com",
 
-    function requireUsername() {
-      if (document.getElementById("username").value.trim() === "") {
-        alert("Enter username first");
-        return false;
-      }
-      return true;
-    }
+projectId: "chatverse-eb340",
 
-    window.enterRoom = function(roomId, roomName) {
-      if (!requireUsername()) return;
-      currentRoom = roomId;
-      showScreen("chatScreen");
-      document.getElementById("roomTitle").textContent = roomName;
-      listenForMessages();
-    };
+storageBucket: "chatverse-eb340.firebasestorage.app",
 
-    window.goBack = function() {
-      if (unsubscribe) unsubscribe();
-      showScreen("lobbyScreen");
-    };
+messagingSenderId: "537889766475",
 
-    window.backToLobby = function() {
-      dashRunning = false;
-      if (unsubscribeScores) unsubscribeScores();
-      showScreen("lobbyScreen");
-    };
+appId: "1:537889766475:web:e14eb4e07e032ea8d761ce"
 
-    window.sendMessage = async function() {
-      const input = document.getElementById("messageInput");
-      const text = input.value.trim();
-      if (text === "" || currentRoom === "") return;
-      await addDoc(collection(db, "rooms", currentRoom, "messages"), {
-        username: getPlayerName(),
-        text: text,
-        createdAt: serverTimestamp()
-      });
-      input.value = "";
-      xp += 2;
-      messageCount += 1;
-      updateStats();
-    };
+};
 
-    window.sendQuick = function(text) {
-      document.getElementById("messageInput").value = text;
-      sendMessage();
-    };
+const app = initializeApp(firebaseConfig);
 
-    function listenForMessages() {
-      const chatBox = document.getElementById("chatBox");
-      const username = document.getElementById("username").value.trim();
-      if (unsubscribe) unsubscribe();
+const db = getFirestore(app);
 
-      const q = query(collection(db, "rooms", currentRoom, "messages"), orderBy("createdAt"), limit(80));
-      unsubscribe = onSnapshot(q, function(snapshot) {
-        chatBox.innerHTML = "";
-        snapshot.forEach(function(doc) {
-          const msg = doc.data();
-          const div = document.createElement("div");
-          div.className = (msg.username || "").includes(username) ? "message me" : "message other";
-          div.innerHTML = "<div class='sender'>" + escapeHTML(msg.username || "Unknown") + "</div>" + escapeHTML(msg.text || "");
-          chatBox.appendChild(div);
-        });
-        chatBox.scrollTop = chatBox.scrollHeight;
-      });
-    }
+let room="";
+let unsub=null;
 
-    document.getElementById("messageInput").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") sendMessage();
-    });
+let xp=0;
+let best=0;
 
-    const canvas = document.getElementById("dashCanvas");
-    const ctx = canvas.getContext("2d");
-    let dashRunning = false;
-    let gameOver = false;
-    let score = 0;
-    let speed = 5;
-    let frame = 0;
-    let player;
-    let obstacles = [];
-    let particles = [];
+setTimeout(()=>{
 
-    function resetDash() {
-      player = { x: 105, y: 310, size: 38, vy: 0, grounded: true, rotation: 0 };
-      obstacles = [];
-      particles = [];
-      score = 0;
-      speed = 5;
-      frame = 0;
-      gameOver = false;
-      document.getElementById("dashStatus").textContent = "Run started. Jump the spikes.";
-    }
+document.getElementById("loadingScreen").classList.remove("active");
 
-    window.openDash = function() {
-      if (!requireUsername()) return;
-      showScreen("dashScreen");
-      updateStats();
-      listenForScores();
-      startDashGame();
-    };
+document.getElementById("lobbyScreen").classList.add("active");
 
-    window.startDashGame = function() {
-      resetDash();
-      dashRunning = true;
-      requestAnimationFrame(gameLoop);
-    };
+},3500);
 
-    function jump() {
-      if (!dashRunning || gameOver) return;
-      if (player.grounded) {
-        player.vy = -15;
-        player.grounded = false;
-        addParticles(player.x, player.y + player.size, 8);
-      }
-    }
+function show(id){
 
-    window.addEventListener("keydown", function(e) {
-      if (e.code === "Space") {
-        e.preventDefault();
-        jump();
-      }
-    });
-    canvas.addEventListener("mousedown", jump);
-    canvas.addEventListener("touchstart", function(e) { e.preventDefault(); jump(); });
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
 
-    function spawnObstacle() {
-      const size = 34 + Math.random() * 12;
-      obstacles.push({ x: canvas.width + 20, y: 348, w: size, h: size });
-    }
+document.getElementById(id).classList.add("active");
 
-    function addParticles(x, y, amount) {
-      for (let i = 0; i < amount; i++) {
-        particles.push({ x, y, vx: -Math.random() * 4, vy: -Math.random() * 4, life: 24 });
-      }
-    }
+}
 
-    function gameLoop() {
-      if (!dashRunning) return;
-      updateDash();
-      drawDash();
-      if (!gameOver) requestAnimationFrame(gameLoop);
-    }
+window.enterRoom=function(id,name){
 
-    function updateDash() {
-      frame++;
-      score += 1;
-      speed = 5 + score / 650;
-      document.getElementById("dashScore").textContent = score;
-      document.getElementById("dashSpeed").textContent = (speed / 5).toFixed(1);
+const username=document.getElementById("username").value.trim();
 
-      player.vy += 0.75;
-      player.y += player.vy;
-      player.rotation += player.grounded ? 0 : 0.13;
+if(username===""){
+alert("Enter username");
+return;
+}
 
-      if (player.y >= 310) {
-        player.y = 310;
-        player.vy = 0;
-        player.grounded = true;
-        player.rotation = 0;
-      }
+room=id;
 
-      if (frame % Math.max(58, Math.floor(105 - speed * 5)) === 0) spawnObstacle();
+show("chatScreen");
 
-      obstacles.forEach(o => o.x -= speed);
-      obstacles = obstacles.filter(o => o.x + o.w > -50);
+document.getElementById("roomTitle").textContent=name;
 
-      particles.forEach(p => { p.x += p.vx; p.y += p.vy; p.life--; });
-      particles = particles.filter(p => p.life > 0);
+listenMessages();
 
-      obstacles.forEach(o => {
-        if (player.x < o.x + o.w && player.x + player.size > o.x && player.y < o.y + o.h && player.y + player.size > o.y) {
-          endDash();
-        }
-      });
-    }
+}
 
-    function drawDash() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+window.goBack=function(){
 
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      gradient.addColorStop(0, "#050509");
-      gradient.addColorStop(1, "#0b1024");
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+if(unsub)unsub();
 
-      ctx.strokeStyle = "rgba(0,170,255,0.18)";
-      ctx.lineWidth = 1;
-      for (let x = -(frame * speed) % 42; x < canvas.width; x += 42) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
-      }
-      for (let y = 0; y < canvas.height; y += 42) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
-      }
+show("lobbyScreen");
 
-      ctx.fillStyle = "rgba(0,170,255,0.18)";
-      ctx.fillRect(0, 350, canvas.width, 4);
-      ctx.fillStyle = "rgba(255,255,255,0.08)";
-      ctx.fillRect(0, 354, canvas.width, 76);
+}
 
-      ctx.save();
-      ctx.translate(player.x + player.size/2, player.y + player.size/2);
-      ctx.rotate(player.rotation);
-      ctx.fillStyle = "#00d5ff";
-      ctx.shadowColor = "#00d5ff";
-      ctx.shadowBlur = 22;
-      ctx.fillRect(-player.size/2, -player.size/2, player.size, player.size);
-      ctx.strokeStyle = "white";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(-player.size/2, -player.size/2, player.size, player.size);
-      ctx.restore();
-      ctx.shadowBlur = 0;
+window.sendMessage=async function(){
 
-      obstacles.forEach(o => {
-        ctx.fillStyle = "#ff2fb3";
-        ctx.shadowColor = "#ff2fb3";
-        ctx.shadowBlur = 18;
-        ctx.beginPath();
-        ctx.moveTo(o.x, o.y + o.h);
-        ctx.lineTo(o.x + o.w/2, o.y);
-        ctx.lineTo(o.x + o.w, o.y + o.h);
-        ctx.closePath();
-        ctx.fill();
-      });
-      ctx.shadowBlur = 0;
+const text=document.getElementById("messageInput").value.trim();
 
-      particles.forEach(p => {
-        ctx.fillStyle = "rgba(0,213,255," + (p.life/24) + ")";
-        ctx.fillRect(p.x, p.y, 4, 4);
-      });
+if(text==="")return;
 
-      ctx.fillStyle = "white";
-      ctx.font = "bold 24px Arial";
-      ctx.fillText("Score " + score, 22, 38);
+await addDoc(collection(db,"rooms",room,"messages"),{
 
-      if (gameOver) {
-        ctx.fillStyle = "rgba(0,0,0,0.62)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "white";
-        ctx.font = "bold 54px Arial";
-        ctx.fillText("CRASH", canvas.width/2 - 90, canvas.height/2 - 10);
-        ctx.font = "22px Arial";
-        ctx.fillText("Score: " + score + "   Press Restart", canvas.width/2 - 135, canvas.height/2 + 35);
-      }
-    }
+username:document.getElementById("username").value,
 
-    async function endDash() {
-      gameOver = true;
-      dashRunning = false;
-      addParticles(player.x, player.y, 20);
-      document.getElementById("dashStatus").textContent = "Crash. Score: " + score;
+text:text,
 
-      if (score > bestDash) {
-        bestDash = score;
-        xp += Math.floor(score / 20);
-        updateStats();
-        await addDoc(collection(db, "dashScores"), {
-          username: getPlayerName(),
-          score: score,
-          createdAt: serverTimestamp()
-        });
-        await addDoc(collection(db, "rooms", "scores", "messages"), {
-          username: getPlayerName(),
-          text: "🏆 New Neon Dash score: " + score,
-          createdAt: serverTimestamp()
-        });
-      }
-      drawDash();
-    }
+createdAt:serverTimestamp()
 
-    function listenForScores() {
-      const box = document.getElementById("leaderboardBox");
-      if (unsubscribeScores) unsubscribeScores();
-      const q = query(collection(db, "dashScores"), orderBy("score", "desc"), limit(10));
-      unsubscribeScores = onSnapshot(q, function(snapshot) {
-        box.innerHTML = "";
-        let rank = 1;
-        snapshot.forEach(function(doc) {
-          const data = doc.data();
-          const row = document.createElement("div");
-          row.className = "leaderboard-row";
-          row.innerHTML = "<span>#" + rank + " " + escapeHTML(data.username || "Unknown") + "</span><b>" + escapeHTML(String(data.score || 0)) + "</b>";
-          box.appendChild(row);
-          rank++;
-        });
-        if (rank === 1) box.innerHTML = "<p class='muted'>No scores yet. Be first.</p>";
-      });
-    }
+});
 
-    function escapeHTML(text) {
-      return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-  </script>
+document.getElementById("messageInput").value="";
+
+xp+=2;
+
+document.getElementById("xp").textContent=xp;
+
+}
+
+function listenMessages(){
+
+const box=document.getElementById("chatBox");
+
+const me=document.getElementById("username").value;
+
+if(unsub)unsub();
+
+const q=query(collection(db,"rooms",room,"messages"),orderBy("createdAt"));
+
+unsub=onSnapshot(q,(snapshot)=>{
+
+box.innerHTML="";
+
+snapshot.forEach((doc)=>{
+
+const msg=doc.data();
+
+const div=document.createElement("div");
+
+div.className=(msg.username===me)?"message me":"message other";
+
+div.innerHTML="<div class='sender'>"+msg.username+"</div>"+msg.text;
+
+box.appendChild(div);
+
+});
+
+box.scrollTop=box.scrollHeight;
+
+});
+
+}
+
+document.getElementById("messageInput").addEventListener("keydown",(e)=>{
+
+if(e.key==="Enter")sendMessage();
+
+});
+
+const canvas=document.getElementById("game");
+
+const ctx=canvas.getContext("2d");
+
+let player;
+let spikes=[];
+let running=false;
+let score=0;
+let speed=6;
+
+function resetGame(){
+
+player={
+x:100,
+y:300,
+size:40,
+vy:0,
+grounded:true
+};
+
+spikes=[];
+
+score=0;
+
+speed=6;
+
+}
+
+window.openDash=function(){
+
+const username=document.getElementById("username").value.trim();
+
+if(username===""){
+alert("Enter username");
+return;
+}
+
+show("dashScreen");
+
+startGame();
+
+}
+
+window.backToLobby=function(){
+
+running=false;
+
+show("lobbyScreen");
+
+}
+
+window.startGame=function(){
+
+resetGame();
+
+running=true;
+
+requestAnimationFrame(loop);
+
+}
+
+function jump(){
+
+if(player.grounded){
+
+player.vy=-15;
+
+player.grounded=false;
+
+}
+
+}
+
+window.addEventListener("keydown",(e)=>{
+
+if(e.code==="Space"){
+
+e.preventDefault();
+
+jump();
+
+}
+
+});
+
+canvas.addEventListener("mousedown",jump);
+
+function loop(){
+
+if(!running)return;
+
+update();
+
+draw();
+
+requestAnimationFrame(loop);
+
+}
+
+function update(){
+
+score++;
+
+document.getElementById("score").textContent=score;
+
+player.vy+=0.7;
+
+player.y+=player.vy;
+
+if(player.y>=300){
+
+player.y=300;
+
+player.vy=0;
+
+player.grounded=true;
+
+}
+
+if(Math.random()<0.02){
+
+spikes.push({
+
+x:canvas.width,
+
+w:35,
+
+h:35
+
+});
+
+}
+
+spikes.forEach(s=>s.x-=speed);
+
+spikes=spikes.filter(s=>s.x>-50);
+
+spikes.forEach(s=>{
+
+if(
+
+player.x < s.x+s.w &&
+
+player.x+player.size > s.x &&
+
+player.y+player.size > 330
+
+){
+
+running=false;
+
+if(score>best){
+
+best=score;
+
+document.getElementById("best").textContent=best;
+
+}
+
+}
+
+});
+
+}
+
+function draw(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#050509";
+
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.strokeStyle="rgba(0,170,255,.12)";
+
+for(let x=0;x<canvas.width;x+=40){
+
+ctx.beginPath();
+
+ctx.moveTo(x,0);
+
+ctx.lineTo(x,canvas.height);
+
+ctx.stroke();
+
+}
+
+for(let y=0;y<canvas.height;y+=40){
+
+ctx.beginPath();
+
+ctx.moveTo(0,y);
+
+ctx.lineTo(canvas.width,y);
+
+ctx.stroke();
+
+}
+
+ctx.fillStyle="#00d5ff";
+
+ctx.fillRect(player.x,player.y,player.size,player.size);
+
+ctx.fillStyle="#ff2fb3";
+
+spikes.forEach(s=>{
+
+ctx.beginPath();
+
+ctx.moveTo(s.x,365);
+
+ctx.lineTo(s.x+s.w/2,330);
+
+ctx.lineTo(s.x+s.w,365);
+
+ctx.fill();
+
+});
+
+ctx.fillStyle="white";
+
+ctx.fillRect(0,365,canvas.width,4);
+
+}
+
+</script>
+
 </body>
 </html>
