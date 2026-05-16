@@ -2,8 +2,11 @@
 <html>
 <head>
   <title>ChatVerse Live</title>
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -19,7 +22,9 @@
       padding: 30px;
     }
 
-    .active { display: block; }
+    .active {
+      display: block;
+    }
 
     .lobby-container {
       max-width: 900px;
@@ -59,18 +64,17 @@
     }
 
     .room-card {
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
       border-radius: 22px;
       padding: 25px;
       cursor: pointer;
       transition: 0.3s;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
 
     .room-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-8px);
+      background: rgba(255,255,255,0.22);
     }
 
     .room-emoji {
@@ -78,50 +82,27 @@
       margin-bottom: 10px;
     }
 
-    .room-card p {
-      color: #ddd;
-      font-size: 14px;
-    }
-
     .chat-page {
       max-width: 800px;
       margin: 25px auto;
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255,255,255,0.12);
       border-radius: 25px;
       overflow: hidden;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
-      border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
     .chat-header {
       padding: 18px 20px;
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0,0,0,0.35);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-    }
-
-    .chat-header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-
-    .back-button {
-      background: #ff65a3;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      padding: 9px 15px;
-      cursor: pointer;
-      font-weight: bold;
     }
 
     .chat-box {
       height: 470px;
       padding: 20px;
       overflow-y: auto;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255,255,255,0.08);
     }
 
     .message {
@@ -129,28 +110,19 @@
       padding: 12px 16px;
       border-radius: 18px;
       max-width: 75%;
-      line-height: 1.4;
       clear: both;
-      animation: pop 0.2s ease-in-out;
       word-wrap: break-word;
-    }
-
-    @keyframes pop {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
     }
 
     .me {
       float: right;
       background: linear-gradient(135deg, #4facfe, #00f2fe);
-      color: #07111f;
-      font-weight: bold;
+      color: black;
     }
 
     .other {
       float: left;
-      background: rgba(255, 255, 255, 0.22);
-      color: white;
+      background: rgba(255,255,255,0.22);
     }
 
     .sender {
@@ -162,7 +134,7 @@
     .input-area {
       display: flex;
       padding: 15px;
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0,0,0,0.35);
       gap: 10px;
     }
 
@@ -175,198 +147,322 @@
       outline: none;
     }
 
-    .send-button {
+    .send-button,
+    .back-button {
       border: none;
       border-radius: 25px;
-      padding: 0 22px;
-      background: #feff9c;
-      color: #111;
+      padding: 10px 20px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 16px;
     }
 
-    .warning {
-      max-width: 650px;
-      margin: 25px auto 0;
-      color: #ddd;
-      font-size: 14px;
-      line-height: 1.5;
+    .send-button {
+      background: #feff9c;
+    }
+
+    .back-button {
+      background: #ff65a3;
+      color: white;
     }
   </style>
 </head>
+
 <body>
 
+  <!-- LOBBY -->
   <div id="lobbyScreen" class="screen active">
+
     <div class="lobby-container">
+
       <h1 class="title">ChatVerse Live</h1>
-      <p class="subtitle">Choose a room and chat live with other people</p>
+
+      <p class="subtitle">
+        Choose a room and chat live
+      </p>
 
       <div class="name-box">
-        <input type="text" id="username" placeholder="Enter your username">
+        <input
+          type="text"
+          id="username"
+          placeholder="Enter username"
+        >
       </div>
 
       <div class="room-grid">
-        <div class="room-card" onclick="enterRoom('gaming', 'Gaming Lobby', '🎮')">
+
+        <div class="room-card"
+          onclick="enterRoom('gaming','🎮 Gaming Lobby')">
+
           <div class="room-emoji">🎮</div>
           <h2>Gaming Lobby</h2>
-          <p>Talk about games, wins, and funny moments.</p>
+
         </div>
 
-        <div class="room-card" onclick="enterRoom('school', 'School Lobby', '📚')">
-          <div class="room-emoji">📚</div>
-          <h2>School Lobby</h2>
-          <p>Homework help, study chat, and class talk.</p>
-        </div>
+        <div class="room-card"
+          onclick="enterRoom('sports','⚾ Sports Lobby')">
 
-        <div class="room-card" onclick="enterRoom('sports', 'Sports Lobby', '⚾')">
           <div class="room-emoji">⚾</div>
           <h2>Sports Lobby</h2>
-          <p>Baseball, basketball, soccer, and more.</p>
+
         </div>
 
-        <div class="room-card" onclick="enterRoom('random', 'Random Lobby', '💬')">
+        <div class="room-card"
+          onclick="enterRoom('school','📚 School Lobby')">
+
+          <div class="room-emoji">📚</div>
+          <h2>School Lobby</h2>
+
+        </div>
+
+        <div class="room-card"
+          onclick="enterRoom('random','💬 Random Lobby')">
+
           <div class="room-emoji">💬</div>
           <h2>Random Lobby</h2>
-          <p>Just chill and talk about anything.</p>
+
         </div>
+
       </div>
 
-      <p class="warning">
-        Safety note: This beginner version does not have login, moderation, or message filtering yet. Only share it with people you trust.
-      </p>
     </div>
+
   </div>
 
+  <!-- CHAT -->
   <div id="chatScreen" class="screen">
+
     <div class="chat-page">
+
       <div class="chat-header">
-        <h1 id="roomTitle">Chat Room</h1>
-        <button class="back-button" onclick="goBackToLobby()">Back</button>
+
+        <h1 id="roomTitle">Room</h1>
+
+        <button
+          class="back-button"
+          onclick="goBack()">
+
+          Back
+
+        </button>
+
       </div>
 
-      <div class="chat-box" id="chatBox"></div>
+      <div
+        class="chat-box"
+        id="chatBox">
+
+      </div>
 
       <div class="input-area">
-        <input type="text" id="messageInput" placeholder="Type your message...">
-        <button class="send-button" onclick="sendMessage()">Send</button>
+
+        <input
+          type="text"
+          id="messageInput"
+          placeholder="Type message..."
+        >
+
+        <button
+          class="send-button"
+          onclick="sendMessage()">
+
+          Send
+
+        </button>
+
       </div>
+
     </div>
+
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  const firebaseConfig = {
-  apiKey: "AIzaSyDY0B4m2ul_SK4cHFydQdn6GEPVtUhqESg",
-  authDomain: "chatverse-eb340.firebaseapp.com",
-  projectId: "chatverse-eb340",
-  storageBucket: "chatverse-eb340.firebasestorage.app",
-  messagingSenderId: "537889766475",
-  appId: "1:537889766475:web:e14eb4e07e032ea8d761ce"
-};
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      query,
+      orderBy,
+      onSnapshot,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDY0B4m2ul_SK4cHFydQdn6GEPVtUhqESg",
+      authDomain: "chatverse-eb340.firebaseapp.com",
+      projectId: "chatverse-eb340",
+      storageBucket: "chatverse-eb340.firebasestorage.app",
+      messagingSenderId: "537889766475",
+      appId: "1:537889766475:web:e14eb4e07e032ea8d761ce"
+    };
 
     const app = initializeApp(firebaseConfig);
+
     const db = getFirestore(app);
 
-    let currentRoomId = "";
-    let unsubscribeMessages = null;
+    let currentRoom = "";
 
-    window.enterRoom = function(roomId, roomName, emoji) {
-      const username = document.getElementById("username").value.trim();
+    let unsubscribe = null;
 
-      if (username === "") {
-        alert("Please enter a username first!");
+    window.enterRoom = function(roomId, roomName) {
+
+      const username =
+        document.getElementById("username")
+        .value
+        .trim();
+
+      if(username === "") {
+        alert("Enter username");
         return;
       }
 
-      currentRoomId = roomId;
+      currentRoom = roomId;
 
-      document.getElementById("lobbyScreen").classList.remove("active");
-      document.getElementById("chatScreen").classList.add("active");
-      document.getElementById("roomTitle").textContent = emoji + " " + roomName;
-      document.getElementById("chatBox").innerHTML = "";
+      document
+        .getElementById("lobbyScreen")
+        .classList
+        .remove("active");
+
+      document
+        .getElementById("chatScreen")
+        .classList
+        .add("active");
+
+      document
+        .getElementById("roomTitle")
+        .textContent = roomName;
 
       listenForMessages();
+
     };
 
-    window.goBackToLobby = function() {
-      if (unsubscribeMessages) {
-        unsubscribeMessages();
-      }
+    window.goBack = function() {
 
-      document.getElementById("chatScreen").classList.remove("active");
-      document.getElementById("lobbyScreen").classList.add("active");
-      document.getElementById("messageInput").value = "";
+      document
+        .getElementById("chatScreen")
+        .classList
+        .remove("active");
+
+      document
+        .getElementById("lobbyScreen")
+        .classList
+        .add("active");
+
     };
 
     window.sendMessage = async function() {
-      const input = document.getElementById("messageInput");
-      const username = document.getElementById("username").value.trim();
-      const text = input.value.trim();
 
-      if (text === "") return;
-      if (currentRoomId === "") return;
+      const input =
+        document.getElementById("messageInput");
+
+      const text =
+        input.value.trim();
+
+      const username =
+        document.getElementById("username")
+        .value
+        .trim();
+
+      if(text === "") return;
+
+      await addDoc(
+
+        collection(
+          db,
+          "rooms",
+          currentRoom,
+          "messages"
+        ),
+
+        {
+          username: username,
+          text: text,
+          createdAt: serverTimestamp()
+        }
+
+      );
 
       input.value = "";
 
-      await addDoc(collection(db, "rooms", currentRoomId, "messages"), {
-        username: username,
-        text: text,
-        createdAt: serverTimestamp()
-      });
     };
 
     function listenForMessages() {
-      const chatBox = document.getElementById("chatBox");
-      const username = document.getElementById("username").value.trim();
 
-      if (unsubscribeMessages) {
-        unsubscribeMessages();
+      const chatBox =
+        document.getElementById("chatBox");
+
+      const username =
+        document.getElementById("username")
+        .value
+        .trim();
+
+      if(unsubscribe) {
+        unsubscribe();
       }
 
-      const messagesRef = collection(db, "rooms", currentRoomId, "messages");
-      const messagesQuery = query(messagesRef, orderBy("createdAt"), limit(50));
+      const q = query(
 
-      unsubscribeMessages = onSnapshot(messagesQuery, function(snapshot) {
+        collection(
+          db,
+          "rooms",
+          currentRoom,
+          "messages"
+        ),
+
+        orderBy("createdAt")
+
+      );
+
+      unsubscribe = onSnapshot(q, (snapshot) => {
+
         chatBox.innerHTML = "";
 
-        snapshot.forEach(function(doc) {
-          const message = doc.data();
-          const messageDiv = document.createElement("div");
+        snapshot.forEach((doc) => {
 
-          if (message.username === username) {
-            messageDiv.className = "message me";
+          const msg = doc.data();
+
+          const div =
+            document.createElement("div");
+
+          if(msg.username === username) {
+            div.className = "message me";
           } else {
-            messageDiv.className = "message other";
+            div.className = "message other";
           }
 
-          const safeUsername = escapeHTML(message.username || "Unknown");
-          const safeText = escapeHTML(message.text || "");
+          div.innerHTML = `
+            <div class="sender">
+              ${msg.username}
+            </div>
 
-          messageDiv.innerHTML = "<div class='sender'>" + safeUsername + "</div>" + safeText;
-          chatBox.appendChild(messageDiv);
+            ${msg.text}
+          `;
+
+          chatBox.appendChild(div);
+
         });
 
-        chatBox.scrollTop = chatBox.scrollHeight;
+        chatBox.scrollTop =
+          chatBox.scrollHeight;
+
       });
+
     }
 
-    function escapeHTML(text) {
-      return text
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
+    document
+      .getElementById("messageInput")
+      .addEventListener("keydown", function(e){
 
-    document.getElementById("messageInput").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        sendMessage();
-      }
-    });
+        if(e.key === "Enter") {
+          sendMessage();
+        }
+
+      });
+
   </script>
 
 </body>
