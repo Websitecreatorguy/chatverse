@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ChatVerse Arcade</title>
+  <title>ChatVerse Dash</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -21,10 +21,10 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(circle at 20% 20%, rgba(0,170,255,0.18), transparent 25%),
-        radial-gradient(circle at 80% 25%, rgba(170,0,255,0.20), transparent 25%),
-        radial-gradient(circle at 50% 85%, rgba(255,0,130,0.14), transparent 30%);
-      animation: pulseBackground 7s infinite alternate;
+        radial-gradient(circle at 15% 15%, rgba(0,170,255,0.18), transparent 24%),
+        radial-gradient(circle at 85% 25%, rgba(150,0,255,0.19), transparent 26%),
+        radial-gradient(circle at 50% 90%, rgba(255,0,120,0.13), transparent 30%);
+      animation: pulseBg 8s infinite alternate;
       z-index: -2;
     }
 
@@ -39,9 +39,9 @@
       z-index: -1;
     }
 
-    @keyframes pulseBackground {
+    @keyframes pulseBg {
       from { transform: scale(1); opacity: 0.75; }
-      to { transform: scale(1.1); opacity: 1; }
+      to { transform: scale(1.08); opacity: 1; }
     }
 
     .screen { display: none; min-height: 100vh; padding: 24px; }
@@ -55,11 +55,12 @@
     }
 
     .title {
-      font-size: clamp(42px, 8vw, 78px);
+      font-size: clamp(42px, 8vw, 82px);
       margin: 0 0 10px;
-      background: linear-gradient(90deg, #8a2eff, #00aaff, #ff65a3, #feff9c);
+      background: linear-gradient(90deg, #8a2eff, #00aaff, #ff2fb3, #ffffff);
       -webkit-background-clip: text;
       color: transparent;
+      letter-spacing: -2px;
     }
 
     .subtitle { color: #d8d8d8; font-size: 18px; }
@@ -91,17 +92,14 @@
     .loadingBar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #8a2eff, #00aaff, #ff65a3);
+      background: linear-gradient(90deg, #8a2eff, #00aaff, #ff2fb3);
       border-radius: 30px;
-      animation: loadBar 3.8s forwards;
+      animation: loadBar 3.5s forwards;
     }
 
     @keyframes loadBar { to { width: 100%; } }
 
-    .app-shell {
-      max-width: 1150px;
-      margin: 0 auto;
-    }
+    .app-shell { max-width: 1160px; margin: 0 auto; }
 
     .glass {
       background: rgba(255,255,255,0.055);
@@ -163,10 +161,7 @@
       border: 1px solid rgba(255,255,255,0.13);
     }
 
-    .section-title {
-      font-size: 28px;
-      margin: 32px 0 16px;
-    }
+    .section-title { font-size: 28px; margin: 32px 0 16px; }
 
     .grid {
       display: grid;
@@ -176,7 +171,7 @@
 
     .card {
       padding: 22px;
-      min-height: 165px;
+      min-height: 160px;
       cursor: pointer;
       transition: 0.25s;
     }
@@ -196,9 +191,7 @@
       margin-top: 22px;
     }
 
-    @media (max-width: 850px) {
-      .chat-layout { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 850px) { .chat-layout { grid-template-columns: 1fr; } }
 
     .chat-page { overflow: hidden; }
 
@@ -211,11 +204,7 @@
       gap: 10px;
     }
 
-    .chat-box {
-      height: 470px;
-      padding: 18px;
-      overflow-y: auto;
-    }
+    .chat-box { height: 470px; padding: 18px; overflow-y: auto; }
 
     .message {
       margin: 12px 0;
@@ -232,86 +221,53 @@
       to { transform: scale(1); opacity: 1; }
     }
 
-    .me {
-      float: right;
-      color: #050505;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
-      font-weight: bold;
-    }
-
-    .other {
-      float: left;
-      background: rgba(255,255,255,0.15);
-    }
-
+    .me { float: right; color: #050505; background: linear-gradient(135deg, #4facfe, #00f2fe); font-weight: bold; }
+    .other { float: left; background: rgba(255,255,255,0.15); }
     .sender { font-size: 12px; opacity: 0.78; margin-bottom: 4px; }
 
-    .input-area {
-      display: flex;
-      gap: 10px;
-      padding: 14px;
-      background: rgba(0,0,0,0.55);
-    }
-
+    .input-area { display: flex; gap: 10px; padding: 14px; background: rgba(0,0,0,0.55); }
     .input-area input { flex: 1; }
 
     .side-panel { padding: 18px; }
+    .mini-box { padding: 16px; border-radius: 20px; margin-bottom: 14px; background: rgba(0,0,0,0.28); border: 1px solid rgba(255,255,255,0.11); }
 
-    .mini-box {
-      padding: 16px;
-      border-radius: 20px;
-      margin-bottom: 14px;
-      background: rgba(0,0,0,0.28);
-      border: 1px solid rgba(255,255,255,0.11);
-    }
+    .danger-note { color: #ffd2d2; font-size: 13px; line-height: 1.45; margin-top: 14px; }
 
-    .game-area {
-      min-height: 180px;
+    .game-wrap { padding: 24px; margin-top: 24px; }
+
+    .game-topbar {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      text-align: center;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.06);
-      margin: 12px 0;
-      padding: 16px;
-    }
-
-    .tap-target {
-      width: 95px;
-      height: 95px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ff65a3, #feff9c);
-      color: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 20px;
-      user-select: none;
-      cursor: pointer;
-      box-shadow: 0 0 25px rgba(255,101,163,0.55);
-    }
-
-    .choice-row {
-      display: flex;
-      gap: 8px;
       flex-wrap: wrap;
-      justify-content: center;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
-    .small-btn {
-      padding: 9px 12px;
-      font-size: 13px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.14);
+    canvas {
+      width: 100%;
+      max-width: 950px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: #050509;
+      box-shadow: 0 0 40px rgba(0,170,255,0.18);
     }
 
-    .danger-note {
-      color: #ffd2d2;
-      font-size: 13px;
-      line-height: 1.45;
-      margin-top: 14px;
+    .game-controls {
+      text-align: center;
+      margin-top: 18px;
+      color: #ddd;
+    }
+
+    .leaderboard-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.09);
+      padding: 9px 0;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -320,72 +276,48 @@
 
   <div id="loadingScreen" class="screen active">
     <div>
-      <h1 class="title">ChatVerse Arcade</h1>
-      <p id="loadingText" class="subtitle">Loading fun...</p>
+      <h1 class="title">ChatVerse Dash</h1>
+      <p class="subtitle">Loading servers • Building rooms • Rendering dash</p>
       <div class="loaderRing"></div>
       <div class="loadingBarContainer"><div class="loadingBar"></div></div>
-      <p class="muted">Connecting chat • Loading games • Building lobbies</p>
+      <p class="muted">Press space to jump. Survive the spikes.</p>
     </div>
   </div>
 
   <div id="lobbyScreen" class="screen">
     <div class="app-shell">
       <div class="hero glass">
-        <h1 class="title">ChatVerse Arcade</h1>
-        <p class="subtitle">Live chat + mini games + XP rooms</p>
+        <h1 class="title">ChatVerse Dash</h1>
+        <p class="subtitle">Live chat + neon dash runner + leaderboard</p>
 
         <div class="name-row">
           <input id="username" placeholder="Enter username">
           <select id="avatar">
-            <option>😎</option>
-            <option>🔥</option>
-            <option>⚾</option>
-            <option>🎮</option>
-            <option>👑</option>
-            <option>🧠</option>
-            <option>🚀</option>
+            <option>😎</option><option>🔥</option><option>⚾</option><option>🎮</option><option>👑</option><option>🚀</option>
           </select>
         </div>
 
         <div class="stats">
           <div class="pill">⭐ XP: <span id="xpCount">0</span></div>
           <div class="pill">💬 Messages: <span id="messageCount">0</span></div>
-          <div class="pill">🎯 Daily: Send 5 messages</div>
+          <div class="pill">🏆 Best Dash: <span id="bestScore">0</span></div>
         </div>
 
-        <p class="danger-note">Public chat safety: share only with people you trust. Do not post your real full name, address, phone number, school, or passwords.</p>
+        <p class="danger-note">Public chat safety: do not post your real full name, address, phone number, school, or passwords.</p>
       </div>
 
-      <h2 class="section-title">Choose a Chat Room</h2>
+      <h2 class="section-title">Live Chat Rooms</h2>
       <div class="grid">
-        <div class="card glass" onclick="enterRoom('gaming','🎮 Gaming Lobby')">
-          <div class="emoji">🎮</div><h2>Gaming Lobby</h2><p class="muted">Talk games, wins, clips, and challenges.</p>
-        </div>
-        <div class="card glass" onclick="enterRoom('sports','⚾ Sports Lobby')">
-          <div class="emoji">⚾</div><h2>Sports Lobby</h2><p class="muted">Baseball, basketball, soccer, and more.</p>
-        </div>
-        <div class="card glass" onclick="enterRoom('school','📚 School Lobby')">
-          <div class="emoji">📚</div><h2>School Lobby</h2><p class="muted">Homework help, study chat, and trivia.</p>
-        </div>
-        <div class="card glass" onclick="enterRoom('random','💬 Random Lobby')">
-          <div class="emoji">💬</div><h2>Random Lobby</h2><p class="muted">Memes, ideas, polls, and fun talk.</p>
-        </div>
+        <div class="card glass" onclick="enterRoom('gaming','🎮 Gaming Lobby')"><div class="emoji">🎮</div><h2>Gaming</h2><p class="muted">Game talk, scores, clips, challenges.</p></div>
+        <div class="card glass" onclick="enterRoom('sports','⚾ Sports Lobby')"><div class="emoji">⚾</div><h2>Sports</h2><p class="muted">Baseball and all sports.</p></div>
+        <div class="card glass" onclick="enterRoom('school','📚 School Lobby')"><div class="emoji">📚</div><h2>School</h2><p class="muted">Homework, study, random school talk.</p></div>
+        <div class="card glass" onclick="enterRoom('random','💬 Random Lobby')"><div class="emoji">💬</div><h2>Random</h2><p class="muted">General chat and announcements.</p></div>
       </div>
 
-      <h2 class="section-title">Mini Games</h2>
+      <h2 class="section-title">Main Game</h2>
       <div class="grid">
-        <div class="card glass" onclick="openGame('tap')">
-          <div class="emoji">⚡</div><h2>Speed Tap</h2><p class="muted">Tap fast for 10 seconds and earn XP.</p>
-        </div>
-        <div class="card glass" onclick="openGame('guess')">
-          <div class="emoji">🔢</div><h2>Number Guess</h2><p class="muted">Guess 1–10 and beat the computer.</p>
-        </div>
-        <div class="card glass" onclick="openGame('rps')">
-          <div class="emoji">✊</div><h2>Rock Paper Scissors</h2><p class="muted">Classic quick challenge.</p>
-        </div>
-        <div class="card glass" onclick="openGame('poll')">
-          <div class="emoji">📊</div><h2>Quick Poll</h2><p class="muted">Create fun questions for friends.</p>
-        </div>
+        <div class="card glass" onclick="openDash()"><div class="emoji">🟦</div><h2>Neon Dash</h2><p class="muted">A fast cube runner. Space/click/tap to jump. Survive as long as possible.</p></div>
+        <div class="card glass" onclick="enterRoom('scores','🏆 Scores Lobby')"><div class="emoji">🏆</div><h2>Scores Lobby</h2><p class="muted">Post wins and challenge friends.</p></div>
       </div>
     </div>
   </div>
@@ -406,45 +338,51 @@
         </div>
 
         <div class="side-panel glass">
-          <h2>Arcade Panel</h2>
-          <div class="mini-box">
-            <b>Your Stats</b>
-            <p>⭐ XP: <span id="sideXp">0</span></p>
-            <p>💬 Messages: <span id="sideMessages">0</span></p>
-          </div>
-          <div class="mini-box">
-            <b>Quick Actions</b>
-            <div class="choice-row" style="margin-top:10px;">
-              <button class="small-btn" onclick="sendQuick('🔥')">🔥</button>
-              <button class="small-btn" onclick="sendQuick('LOL 😂')">LOL 😂</button>
-              <button class="small-btn" onclick="sendQuick('W! 🏆')">W 🏆</button>
-              <button class="small-btn" onclick="sendQuick('GG 🎮')">GG 🎮</button>
-            </div>
-          </div>
-          <div class="mini-box">
-            <b>Daily Challenge</b>
-            <p class="muted">Send 5 messages to earn bonus XP.</p>
-            <button onclick="claimDaily()">Claim Daily</button>
-          </div>
+          <h2>Player Panel</h2>
+          <div class="mini-box"><b>Your Stats</b><p>⭐ XP: <span id="sideXp">0</span></p><p>💬 Messages: <span id="sideMessages">0</span></p><p>🏆 Best Dash: <span id="sideBest">0</span></p></div>
+          <div class="mini-box"><b>Quick Send</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;"><button onclick="sendQuick('GG')">GG</button><button onclick="sendQuick('W')">W</button><button onclick="sendQuick('New high score!')">Score</button></div></div>
+          <div class="mini-box"><b>Play</b><p class="muted">Jump into Neon Dash and post your score.</p><button onclick="openDash()">Open Neon Dash</button></div>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="gameScreen" class="screen">
+  <div id="dashScreen" class="screen">
     <div class="app-shell">
-      <div class="hero glass">
-        <h1 id="gameTitle">Mini Game</h1>
-        <div id="gameArea" class="game-area"></div>
-        <p id="gameResult" class="subtitle"></p>
-        <button onclick="backToLobby()">Back to Lobby</button>
+      <div class="game-wrap glass">
+        <div class="game-topbar">
+          <div>
+            <h1 style="margin:0;">🟦 Neon Dash</h1>
+            <p class="muted">Space / click / tap to jump. Avoid spikes.</p>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button onclick="startDashGame()">Restart</button>
+            <button onclick="backToLobby()">Lobby</button>
+          </div>
+        </div>
+
+        <canvas id="dashCanvas" width="950" height="430"></canvas>
+
+        <div class="game-controls">
+          <div class="stats">
+            <div class="pill">Score: <span id="dashScore">0</span></div>
+            <div class="pill">Best: <span id="dashBest">0</span></div>
+            <div class="pill">Speed: <span id="dashSpeed">1</span>x</div>
+          </div>
+          <p id="dashStatus" class="subtitle">Press Start, then jump.</p>
+        </div>
+      </div>
+
+      <h2 class="section-title">Leaderboard</h2>
+      <div class="glass" style="padding:18px;" id="leaderboardBox">
+        <p class="muted">Loading scores...</p>
       </div>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDY0B4m2ul_SK4cHFydQdn6GEPVtUhqESg",
@@ -460,32 +398,51 @@
 
     let currentRoom = "";
     let unsubscribe = null;
+    let unsubscribeScores = null;
     let xp = Number(localStorage.getItem("chatverseXP") || 0);
     let messageCount = Number(localStorage.getItem("chatverseMessages") || 0);
+    let bestDash = Number(localStorage.getItem("chatverseBestDash") || 0);
 
     function updateStats() {
       document.getElementById("xpCount").textContent = xp;
       document.getElementById("messageCount").textContent = messageCount;
+      document.getElementById("bestScore").textContent = bestDash;
       document.getElementById("sideXp").textContent = xp;
       document.getElementById("sideMessages").textContent = messageCount;
+      document.getElementById("sideBest").textContent = bestDash;
+      document.getElementById("dashBest").textContent = bestDash;
       localStorage.setItem("chatverseXP", xp);
       localStorage.setItem("chatverseMessages", messageCount);
+      localStorage.setItem("chatverseBestDash", bestDash);
     }
 
     setTimeout(function() {
       document.getElementById("loadingScreen").classList.remove("active");
       document.getElementById("lobbyScreen").classList.add("active");
       updateStats();
-    }, 3900);
+    }, 3700);
 
     function showScreen(id) {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById(id).classList.add("active");
     }
 
-    window.enterRoom = function(roomId, roomName) {
+    function getPlayerName() {
       const username = document.getElementById("username").value.trim();
-      if (username === "") { alert("Enter username first"); return; }
+      const avatar = document.getElementById("avatar").value;
+      return avatar + " " + username;
+    }
+
+    function requireUsername() {
+      if (document.getElementById("username").value.trim() === "") {
+        alert("Enter username first");
+        return false;
+      }
+      return true;
+    }
+
+    window.enterRoom = function(roomId, roomName) {
+      if (!requireUsername()) return;
       currentRoom = roomId;
       showScreen("chatScreen");
       document.getElementById("roomTitle").textContent = roomName;
@@ -498,22 +455,20 @@
     };
 
     window.backToLobby = function() {
+      dashRunning = false;
+      if (unsubscribeScores) unsubscribeScores();
       showScreen("lobbyScreen");
     };
 
     window.sendMessage = async function() {
       const input = document.getElementById("messageInput");
       const text = input.value.trim();
-      const username = document.getElementById("username").value.trim();
-      const avatar = document.getElementById("avatar").value;
       if (text === "" || currentRoom === "") return;
-
       await addDoc(collection(db, "rooms", currentRoom, "messages"), {
-        username: avatar + " " + username,
+        username: getPlayerName(),
         text: text,
         createdAt: serverTimestamp()
       });
-
       input.value = "";
       xp += 2;
       messageCount += 1;
@@ -530,7 +485,7 @@
       const username = document.getElementById("username").value.trim();
       if (unsubscribe) unsubscribe();
 
-      const q = query(collection(db, "rooms", currentRoom, "messages"), orderBy("createdAt"));
+      const q = query(collection(db, "rooms", currentRoom, "messages"), orderBy("createdAt"), limit(80));
       unsubscribe = onSnapshot(q, function(snapshot) {
         chatBox.innerHTML = "";
         snapshot.forEach(function(doc) {
@@ -544,109 +499,226 @@
       });
     }
 
-    window.claimDaily = function() {
-      if (messageCount >= 5) {
-        xp += 25;
-        messageCount = 0;
-        updateStats();
-        alert("Daily reward claimed! +25 XP");
-      } else {
-        alert("Send 5 messages first!");
-      }
-    };
+    document.getElementById("messageInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") sendMessage();
+    });
 
-    window.openGame = function(game) {
-      const username = document.getElementById("username").value.trim();
-      if (username === "") { alert("Enter username first"); return; }
-      showScreen("gameScreen");
-      document.getElementById("gameResult").textContent = "";
+    const canvas = document.getElementById("dashCanvas");
+    const ctx = canvas.getContext("2d");
+    let dashRunning = false;
+    let gameOver = false;
+    let score = 0;
+    let speed = 5;
+    let frame = 0;
+    let player;
+    let obstacles = [];
+    let particles = [];
 
-      if (game === "tap") startTapGame();
-      if (game === "guess") startGuessGame();
-      if (game === "rps") startRpsGame();
-      if (game === "poll") startPollGame();
-    };
-
-    function startTapGame() {
-      let score = 0;
-      let time = 10;
-      document.getElementById("gameTitle").textContent = "⚡ Speed Tap";
-      document.getElementById("gameArea").innerHTML = "<div class='tap-target' id='tapTarget'>TAP</div>";
-      document.getElementById("gameResult").textContent = "Time: 10 | Score: 0";
-
-      document.getElementById("tapTarget").onclick = function() {
-        score++;
-        document.getElementById("gameResult").textContent = "Time: " + time + " | Score: " + score;
-      };
-
-      const timer = setInterval(function() {
-        time--;
-        document.getElementById("gameResult").textContent = "Time: " + time + " | Score: " + score;
-        if (time <= 0) {
-          clearInterval(timer);
-          xp += score;
-          updateStats();
-          document.getElementById("gameArea").innerHTML = "<h2>Final Score: " + score + "</h2>";
-          document.getElementById("gameResult").textContent = "+" + score + " XP earned!";
-        }
-      }, 1000);
+    function resetDash() {
+      player = { x: 105, y: 310, size: 38, vy: 0, grounded: true, rotation: 0 };
+      obstacles = [];
+      particles = [];
+      score = 0;
+      speed = 5;
+      frame = 0;
+      gameOver = false;
+      document.getElementById("dashStatus").textContent = "Run started. Jump the spikes.";
     }
 
-    function startGuessGame() {
-      const secret = Math.floor(Math.random() * 10) + 1;
-      document.getElementById("gameTitle").textContent = "🔢 Number Guess";
-      document.getElementById("gameArea").innerHTML = "<div><p>Guess a number from 1 to 10</p><input id='guessInput' type='number' min='1' max='10'><br><br><button onclick='checkGuess(" + secret + ")'>Guess</button></div>";
-    }
-
-    window.checkGuess = function(secret) {
-      const guess = Number(document.getElementById("guessInput").value);
-      if (guess === secret) {
-        xp += 15;
-        updateStats();
-        document.getElementById("gameResult").textContent = "Correct! +15 XP";
-      } else {
-        document.getElementById("gameResult").textContent = "Nope! It was " + secret;
-      }
-    };
-
-    function startRpsGame() {
-      document.getElementById("gameTitle").textContent = "✊ Rock Paper Scissors";
-      document.getElementById("gameArea").innerHTML = "<div class='choice-row'><button onclick='playRps(\"rock\")'>✊ Rock</button><button onclick='playRps(\"paper\")'>✋ Paper</button><button onclick='playRps(\"scissors\")'>✌️ Scissors</button></div>";
-    }
-
-    window.playRps = function(player) {
-      const choices = ["rock", "paper", "scissors"];
-      const bot = choices[Math.floor(Math.random() * 3)];
-      let result = "Tie!";
-      if ((player === "rock" && bot === "scissors") || (player === "paper" && bot === "rock") || (player === "scissors" && bot === "paper")) {
-        result = "You win! +10 XP";
-        xp += 10;
-        updateStats();
-      } else if (player !== bot) {
-        result = "You lost!";
-      }
-      document.getElementById("gameResult").textContent = "You: " + player + " | Bot: " + bot + " — " + result;
-    };
-
-    function startPollGame() {
-      document.getElementById("gameTitle").textContent = "📊 Quick Poll";
-      document.getElementById("gameArea").innerHTML = "<div><input id='pollQuestion' placeholder='Ask a poll question'><br><br><button onclick='createPoll()'>Post Poll to Random Lobby</button></div>";
-    }
-
-    window.createPoll = async function() {
-      const question = document.getElementById("pollQuestion").value.trim();
-      const username = document.getElementById("username").value.trim();
-      const avatar = document.getElementById("avatar").value;
-      if (question === "") return;
-      await addDoc(collection(db, "rooms", "random", "messages"), {
-        username: avatar + " " + username,
-        text: "📊 POLL: " + question + " | Reply YES or NO!",
-        createdAt: serverTimestamp()
-      });
-      xp += 8;
+    window.openDash = function() {
+      if (!requireUsername()) return;
+      showScreen("dashScreen");
       updateStats();
-      document.getElementById("gameResult").textContent = "Poll posted to Random Lobby! +8 XP";
+      listenForScores();
+      startDashGame();
     };
+
+    window.startDashGame = function() {
+      resetDash();
+      dashRunning = true;
+      requestAnimationFrame(gameLoop);
+    };
+
+    function jump() {
+      if (!dashRunning || gameOver) return;
+      if (player.grounded) {
+        player.vy = -15;
+        player.grounded = false;
+        addParticles(player.x, player.y + player.size, 8);
+      }
+    }
+
+    window.addEventListener("keydown", function(e) {
+      if (e.code === "Space") {
+        e.preventDefault();
+        jump();
+      }
+    });
+    canvas.addEventListener("mousedown", jump);
+    canvas.addEventListener("touchstart", function(e) { e.preventDefault(); jump(); });
+
+    function spawnObstacle() {
+      const size = 34 + Math.random() * 12;
+      obstacles.push({ x: canvas.width + 20, y: 348, w: size, h: size });
+    }
+
+    function addParticles(x, y, amount) {
+      for (let i = 0; i < amount; i++) {
+        particles.push({ x, y, vx: -Math.random() * 4, vy: -Math.random() * 4, life: 24 });
+      }
+    }
+
+    function gameLoop() {
+      if (!dashRunning) return;
+      updateDash();
+      drawDash();
+      if (!gameOver) requestAnimationFrame(gameLoop);
+    }
+
+    function updateDash() {
+      frame++;
+      score += 1;
+      speed = 5 + score / 650;
+      document.getElementById("dashScore").textContent = score;
+      document.getElementById("dashSpeed").textContent = (speed / 5).toFixed(1);
+
+      player.vy += 0.75;
+      player.y += player.vy;
+      player.rotation += player.grounded ? 0 : 0.13;
+
+      if (player.y >= 310) {
+        player.y = 310;
+        player.vy = 0;
+        player.grounded = true;
+        player.rotation = 0;
+      }
+
+      if (frame % Math.max(58, Math.floor(105 - speed * 5)) === 0) spawnObstacle();
+
+      obstacles.forEach(o => o.x -= speed);
+      obstacles = obstacles.filter(o => o.x + o.w > -50);
+
+      particles.forEach(p => { p.x += p.vx; p.y += p.vy; p.life--; });
+      particles = particles.filter(p => p.life > 0);
+
+      obstacles.forEach(o => {
+        if (player.x < o.x + o.w && player.x + player.size > o.x && player.y < o.y + o.h && player.y + player.size > o.y) {
+          endDash();
+        }
+      });
+    }
+
+    function drawDash() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, "#050509");
+      gradient.addColorStop(1, "#0b1024");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = "rgba(0,170,255,0.18)";
+      ctx.lineWidth = 1;
+      for (let x = -(frame * speed) % 42; x < canvas.width; x += 42) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 42) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+      }
+
+      ctx.fillStyle = "rgba(0,170,255,0.18)";
+      ctx.fillRect(0, 350, canvas.width, 4);
+      ctx.fillStyle = "rgba(255,255,255,0.08)";
+      ctx.fillRect(0, 354, canvas.width, 76);
+
+      ctx.save();
+      ctx.translate(player.x + player.size/2, player.y + player.size/2);
+      ctx.rotate(player.rotation);
+      ctx.fillStyle = "#00d5ff";
+      ctx.shadowColor = "#00d5ff";
+      ctx.shadowBlur = 22;
+      ctx.fillRect(-player.size/2, -player.size/2, player.size, player.size);
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(-player.size/2, -player.size/2, player.size, player.size);
+      ctx.restore();
+      ctx.shadowBlur = 0;
+
+      obstacles.forEach(o => {
+        ctx.fillStyle = "#ff2fb3";
+        ctx.shadowColor = "#ff2fb3";
+        ctx.shadowBlur = 18;
+        ctx.beginPath();
+        ctx.moveTo(o.x, o.y + o.h);
+        ctx.lineTo(o.x + o.w/2, o.y);
+        ctx.lineTo(o.x + o.w, o.y + o.h);
+        ctx.closePath();
+        ctx.fill();
+      });
+      ctx.shadowBlur = 0;
+
+      particles.forEach(p => {
+        ctx.fillStyle = "rgba(0,213,255," + (p.life/24) + ")";
+        ctx.fillRect(p.x, p.y, 4, 4);
+      });
+
+      ctx.fillStyle = "white";
+      ctx.font = "bold 24px Arial";
+      ctx.fillText("Score " + score, 22, 38);
+
+      if (gameOver) {
+        ctx.fillStyle = "rgba(0,0,0,0.62)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        ctx.font = "bold 54px Arial";
+        ctx.fillText("CRASH", canvas.width/2 - 90, canvas.height/2 - 10);
+        ctx.font = "22px Arial";
+        ctx.fillText("Score: " + score + "   Press Restart", canvas.width/2 - 135, canvas.height/2 + 35);
+      }
+    }
+
+    async function endDash() {
+      gameOver = true;
+      dashRunning = false;
+      addParticles(player.x, player.y, 20);
+      document.getElementById("dashStatus").textContent = "Crash. Score: " + score;
+
+      if (score > bestDash) {
+        bestDash = score;
+        xp += Math.floor(score / 20);
+        updateStats();
+        await addDoc(collection(db, "dashScores"), {
+          username: getPlayerName(),
+          score: score,
+          createdAt: serverTimestamp()
+        });
+        await addDoc(collection(db, "rooms", "scores", "messages"), {
+          username: getPlayerName(),
+          text: "🏆 New Neon Dash score: " + score,
+          createdAt: serverTimestamp()
+        });
+      }
+      drawDash();
+    }
+
+    function listenForScores() {
+      const box = document.getElementById("leaderboardBox");
+      if (unsubscribeScores) unsubscribeScores();
+      const q = query(collection(db, "dashScores"), orderBy("score", "desc"), limit(10));
+      unsubscribeScores = onSnapshot(q, function(snapshot) {
+        box.innerHTML = "";
+        let rank = 1;
+        snapshot.forEach(function(doc) {
+          const data = doc.data();
+          const row = document.createElement("div");
+          row.className = "leaderboard-row";
+          row.innerHTML = "<span>#" + rank + " " + escapeHTML(data.username || "Unknown") + "</span><b>" + escapeHTML(String(data.score || 0)) + "</b>";
+          box.appendChild(row);
+          rank++;
+        });
+        if (rank === 1) box.innerHTML = "<p class='muted'>No scores yet. Be first.</p>";
+      });
+    }
 
     function escapeHTML(text) {
       return String(text)
@@ -656,12 +728,7 @@
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
     }
-
-    document.getElementById("messageInput").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") sendMessage();
-    });
   </script>
-
 </body>
 </html>
 
