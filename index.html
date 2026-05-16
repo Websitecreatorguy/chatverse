@@ -356,7 +356,7 @@ body::after {
 </head>
 
 <body>
-<div id="loadingScreen" class="screen active">
+<div id="lobbyScreen" class="screen">
 
   <div class="lobby-container">
 
@@ -538,7 +538,19 @@ body::after {
     const app = initializeApp(firebaseConfig);
 
     const db = getFirestore(app);
+setTimeout(() => {
 
+  document
+    .getElementById("loadingScreen")
+    .classList
+    .remove("active");
+
+  document
+    .getElementById("lobbyScreen")
+    .classList
+    .add("active");
+
+}, 5000);
     let currentRoom = "";
 
     let unsubscribe = null;
